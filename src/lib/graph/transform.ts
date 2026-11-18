@@ -115,6 +115,59 @@ export function getDirectDisciples(
 }
 
 /**
+ * Extracts a discipler's personal downline subtree (themselves + all descendants),
+ * anchored at the center (0, 0) for their personal Family Tree Web workspace.
+ */
+export function extractPersonalSubtree(
+  disciplerId: string,
+  profiles: Profile[]
+): DiscipleshipGraphData {
+  const childrenMap = new Map<string, Profile[]>();
+  const byId = new Map<string, Profile>();
+
+  for (const p of profiles) {
+    byId.set(p.id, p);
+    if (p.discipler_id) {
+      const list = childrenMap.get(p.discipler_id) ?? [];
+      list.push(p);
+      childrenMap.set(p.discipler_id, list);
+    }
+  }
+
+  const root = byId.get(disciplerId);
+  if (!root) {
+    return { nodes: [], links: [] };
+  }
+
+  const subtreeProfiles: Profile[] = [];
+  const queue: Profile[] = [root];
+  const visited = new Set<string>();
+
+  while (queue.length > 0) {
+    const current = queue.shift()!;
+    if (visited.has(current.id)) continue;
+    visited.add(current.id);
+    subtreeProfiles.push(current);
+
+    const children = childrenMap.get(current.id) ?? [];
+    for (const child of children) {
+      queue.push(child);
+    }
+  }
+
+  const graph = transformProfilesToGraph(subtreeProfiles);
+  // Pin the logged-in discipler at the center of their local web
+  for (const node of graph.nodes) {
+    if (node.id === disciplerId) {
+      node.fx = 0;
+      node.fy = 0;
+    }
+  }
+
+  return graph;
+}
+
+/**
  * Fallback seed profiles if Supabase env vars are missing during offline builds.
  */
 export const FALLBACK_PROFILES: Profile[] = [

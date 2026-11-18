@@ -55,6 +55,15 @@ export interface DisciplerApplication {
   created_at: string;
 }
 
+export interface MentorshipRequest {
+  id: string;
+  requester_id: string;
+  preferred_notes: string | null;
+  status: "pending" | "paired" | "closed";
+  assigned_discipler_id: string | null;
+  created_at: string;
+}
+
 /**
  * Graph data structures for the Obsidian-style Discipleship Family Tree.
  */
