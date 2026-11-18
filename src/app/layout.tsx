@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { GlassNavbar } from "@/components/layout/GlassNavbar";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,8 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-white font-sans text-cru-charcoal antialiased">
-        {children}
+      <body className="flex min-h-screen flex-col bg-white font-sans text-cru-charcoal antialiased">
+        <GlassNavbar />
+        <div className="flex-1">{children}</div>
+        <SiteFooter />
       </body>
     </html>
   );
