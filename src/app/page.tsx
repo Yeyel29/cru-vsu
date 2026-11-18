@@ -8,6 +8,10 @@ import {
   LeftProgressRail,
   type RailSection,
 } from "@/components/layout/LeftProgressRail";
+import { DiscipleshipExplorer } from "@/components/graph/DiscipleshipExplorer";
+import { fetchDiscipleshipGraphData } from "@/lib/graph/queries";
+
+export const dynamic = "force-dynamic";
 
 const HOME_SECTIONS: RailSection[] = [
   { id: "overview", label: "Overview" },
@@ -16,7 +20,9 @@ const HOME_SECTIONS: RailSection[] = [
   { id: "join-cru", label: "Join Cru" },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const graphData = await fetchDiscipleshipGraphData();
+
   return (
     <main className="min-h-screen bg-white">
       <LeftProgressRail sections={HOME_SECTIONS} />
@@ -67,30 +73,36 @@ export default function HomePage() {
 
         <DraftingDivider />
 
-        {/* Section 2: Discipleship Tree Placeholder (Built in Step 3) */}
+        {/* Section 2: Interactive Obsidian-Style Discipleship Tree */}
         <section id="discipleship-tree" className="px-6 py-24 md:px-12">
           <div className="mb-3 font-mono text-xs uppercase tracking-widest text-cru-gold-hover">
             01 · Spiritual Family Tree
           </div>
-          <h2 className="text-2xl font-medium tracking-tight text-cru-charcoal md:text-[32px] md:leading-[42px]">
-            Obsidian-Style Discipleship Network
-          </h2>
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-cru-muted">
-            Every student&apos;s spiritual walk connects back through their
-            discipler—their spiritual mom or dad—to Jesus Christ at the center.
-          </p>
-
-          <div className="mt-10 flex min-h-[340px] flex-col items-center justify-center rounded-[24px] border border-neutral-900/[0.07] bg-cru-surface p-8 text-center">
-            <div className="grid size-14 place-items-center rounded-full bg-cru-gold-soft text-cru-gold-hover">
-              <GitBranch className="size-6" />
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-medium tracking-tight text-cru-charcoal md:text-[32px] md:leading-[42px]">
+                Obsidian-Style Discipleship Network
+              </h2>
+              <p className="mt-3 max-w-2xl text-base leading-relaxed text-cru-muted">
+                Every student&apos;s spiritual walk connects back through their
+                discipler—their spiritual mom or dad—to Jesus Christ at the center.
+              </p>
             </div>
-            <p className="mt-4 text-sm font-medium text-cru-charcoal">
-              Interactive Force-Directed Graph Canvas
-            </p>
-            <p className="mt-1 max-w-md text-xs text-cru-muted">
-              Coming in Step 3 (`feature/obsidian-discipleship-graph`) with
-              real-time physics, zoom, search, and profile drawers.
-            </p>
+            <Link
+              href="/tree"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-cru-charcoal transition-colors hover:text-cru-gold-hover"
+            >
+              <span>Open Full Explorer</span>
+              <ArrowRight className="size-4" />
+            </Link>
+          </div>
+
+          <div className="mt-8">
+            <DiscipleshipExplorer
+              data={graphData}
+              compact
+              fullScreenHref="/tree"
+            />
           </div>
         </section>
 
