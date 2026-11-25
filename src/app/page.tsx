@@ -57,7 +57,7 @@ export default async function HomePage() {
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-cru-muted">
-            A student-led campus movement built on authentic relationships—where
+            A student-led campus movement built on authentic relationships, where
             spiritual moms and dads walk alongside disciples, rooted in Jesus at
             the center of it all.
           </p>
@@ -68,7 +68,7 @@ export default async function HomePage() {
               className="inline-flex h-12 items-center gap-3 rounded-full bg-cru-gold p-1.5 pr-6 text-sm font-semibold text-cru-charcoal shadow-sm transition-colors hover:bg-cru-gold-hover"
             >
               <span className="grid size-9 place-items-center rounded-full bg-white text-cru-charcoal">
-                <GitBranch className="size-4" />
+                <GitBranch className="size-4" aria-hidden="true" />
               </span>
               Explore Discipleship Tree
             </Link>
@@ -78,7 +78,7 @@ export default async function HomePage() {
               className="inline-flex h-12 items-center gap-2 rounded-full border border-neutral-900/[0.08] bg-cru-surface px-5 text-sm font-medium text-cru-charcoal transition-colors hover:border-cru-gold/60"
             >
               <span>Campus Activities</span>
-              <ArrowRight className="size-4 text-cru-gold-hover" />
+              <ArrowRight className="size-4 text-cru-gold-hover" aria-hidden="true" />
             </Link>
           </div>
 
@@ -115,7 +115,7 @@ export default async function HomePage() {
 
         {/* Section 2: Interactive Obsidian-Style Discipleship Tree */}
         <section id="discipleship-tree" className="px-6 py-24 md:px-12">
-          <div className="mb-3 font-mono text-xs uppercase tracking-widest text-cru-gold-hover">
+          <div className="mb-3 font-mono text-xs uppercase tracking-widest text-[#8a5a00]">
             01 · Spiritual Family Tree
           </div>
           <div className="flex flex-wrap items-end justify-between gap-4">
@@ -125,15 +125,15 @@ export default async function HomePage() {
               </h2>
               <p className="mt-3 max-w-2xl text-base leading-relaxed text-cru-muted">
                 Every student&apos;s spiritual walk connects back through their
-                discipler—their spiritual mom or dad—to Jesus Christ at the center.
+                discipler (their spiritual mom or dad) to Jesus Christ at the center.
               </p>
             </div>
             <Link
               href="/tree"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-cru-charcoal transition-colors hover:text-cru-gold-hover"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-cru-charcoal transition-colors hover:text-[#8a5a00]"
             >
               <span>Open Full Explorer</span>
-              <ArrowRight className="size-4" />
+              <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </div>
 
@@ -150,7 +150,7 @@ export default async function HomePage() {
 
         {/* Section 3: Ministry Projects Showcase */}
         <section id="projects" className="px-6 py-24 md:px-12">
-          <div className="mb-3 font-mono text-xs uppercase tracking-widest text-cru-gold-hover">
+          <div className="mb-3 font-mono text-xs uppercase tracking-widest text-[#8a5a00]">
             02 · Campus Ministry
           </div>
           <h2 className="text-2xl font-medium tracking-tight text-cru-charcoal md:text-[32px] md:leading-[42px]">
@@ -170,8 +170,8 @@ export default async function HomePage() {
         <section id="join-cru" className="px-6 py-24 md:px-12">
           <div className="grid gap-10 rounded-[28px] border border-neutral-900/[0.07] bg-cru-surface p-7 md:grid-cols-5 md:p-12">
             <div className="md:col-span-2">
-              <div className="mb-3 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-cru-gold-hover">
-                <Sparkles className="size-3.5" />
+              <div className="mb-3 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#8a5a00]">
+                <Sparkles className="size-3.5" aria-hidden="true" />
                 03 · Get Connected
               </div>
               <h2 className="text-2xl font-medium tracking-tight text-cru-charcoal md:text-[32px] md:leading-[40px]">
@@ -180,7 +180,7 @@ export default async function HomePage() {
               <p className="mt-4 text-sm leading-relaxed text-cru-muted">
                 Whether you&apos;re a freshman looking for friends, wanting to
                 explore Christianity, or seeking a spiritual mom or dad to walk
-                with you through college—we&apos;d love to meet you.
+                with you through college, we&apos;d love to meet you.
               </p>
 
               <div className="mt-8 space-y-3 border-t border-neutral-900/[0.06] pt-6">
