@@ -7,7 +7,6 @@ import {
   GitBranch,
   Home,
   Layers,
-  UserPlus,
   LogIn,
   Menu,
   X,
@@ -19,6 +18,32 @@ const NAV_ITEMS = [
   { label: "Tree", href: "/tree", icon: GitBranch },
   { label: "Projects", href: "/#projects", icon: Layers },
 ];
+
+const CHEVRON_ALPHAS = [1, 0.78, 0.54, 0.32, 0.16] as const;
+
+function DottedChevron({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <svg
+      viewBox="0 0 14 20"
+      fill="currentColor"
+      aria-hidden="true"
+      className={className}
+      style={style}
+    >
+      <circle cx="3" cy="3" r="1.4" />
+      <circle cx="6.5" cy="6.5" r="1.4" />
+      <circle cx="10" cy="10" r="1.4" />
+      <circle cx="6.5" cy="13.5" r="1.4" />
+      <circle cx="3" cy="17" r="1.4" />
+    </svg>
+  );
+}
 
 /**
  * Poulo.site-inspired floating liquid glassmorphism navbar in Cru Gold & White.
@@ -73,10 +98,10 @@ export function GlassNavbar() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "relative inline-flex h-10 items-center gap-2 rounded-full px-3.5 text-[14px] font-medium transition-all duration-200",
+                    "relative inline-flex h-10 items-center gap-2 rounded-full px-3.5 text-[14px] font-medium transition-colors duration-150",
                     isActive
                       ? "bg-white text-cru-charcoal shadow-[0_1px_3px_rgb(0_0_0/0.12)]"
-                      : "text-cru-charcoal/70 hover:bg-white/50 hover:text-cru-charcoal"
+                      : "text-cru-charcoal/70 hover:text-cru-charcoal"
                   )}
                 >
                   <Icon
@@ -105,13 +130,30 @@ export function GlassNavbar() {
           </button>
         </nav>
 
-        {/* Primary Cru Gold Split-Badge CTA */}
+        {/* Primary Cru Gold Split-Badge CTA (Poulo-style expanding pill hover) */}
         <Link
           href="/#join-cru"
-          className="pointer-events-auto inline-flex h-[52px] shrink-0 items-center gap-3 rounded-full bg-cru-gold p-1.5 pr-5 text-sm font-semibold text-cru-charcoal shadow-[0_10px_35px_-10px_rgba(253,185,19,0.45)] transition-all hover:bg-cru-gold-hover active:scale-[0.98]"
+          className="group relative pointer-events-auto inline-flex h-[52px] shrink-0 items-center overflow-hidden rounded-full bg-cru-gold pl-[54px] pr-5 text-sm font-semibold text-cru-charcoal shadow-[0_10px_35px_-10px_rgba(253,185,19,0.45)] transition-colors duration-200 hover:bg-cru-gold-hover active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cru-charcoal"
         >
-          <span className="grid size-9 place-items-center rounded-full bg-white text-cru-charcoal shadow-xs">
-            <UserPlus className="size-4" />
+          <span
+            aria-hidden="true"
+            className="absolute left-1.5 top-1.5 z-10 flex h-10 w-10 items-center justify-between overflow-hidden rounded-full bg-white px-[13px] text-cru-charcoal shadow-xs transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-[calc(100%-12px)] motion-reduce:transition-none"
+          >
+            {CHEVRON_ALPHAS.map((alpha, idx) => (
+              <DottedChevron
+                key={idx}
+                style={{
+                  color: `color-mix(in srgb, currentColor ${Math.round(alpha * 100)}%, transparent)`,
+                  transitionDelay: idx === 0 ? "0ms" : `${idx * 30}ms`,
+                }}
+                className={cn(
+                  "h-4 w-3.5 shrink-0 transition-all duration-300 motion-reduce:transition-none motion-reduce:transform-none",
+                  idx === 0
+                    ? "translate-x-0 opacity-100"
+                    : "-translate-x-1.5 opacity-0 group-hover:translate-x-0 group-hover:opacity-100"
+                )}
+              />
+            ))}
           </span>
           <span>Join Cru</span>
         </Link>

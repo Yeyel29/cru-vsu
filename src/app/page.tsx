@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GitBranch, Sparkles, ArrowRight } from "lucide-react";
+import { GitBranch, ArrowRight } from "lucide-react";
 import {
   DraftingContainer,
   DraftingDivider,
@@ -42,10 +42,9 @@ export default async function HomePage() {
       <DraftingContainer>
         {/* Section 1: Hero / Overview */}
         <section id="overview" className="px-6 pb-20 pt-36 md:px-12 md:pt-44">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-neutral-900/[0.08] bg-cru-surface px-4 py-1.5 font-mono text-[11px] uppercase tracking-wider text-cru-muted">
-            <span className="size-2 rounded-full bg-cru-gold" />
+          <p className="mb-4 text-sm font-medium text-[#8a5a00]">
             Cru · Visayas State University
-          </div>
+          </p>
 
           <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-cru-charcoal md:text-6xl md:leading-[1.08]">
             Helping VSU students know{" "}
@@ -70,41 +69,40 @@ export default async function HomePage() {
               <span className="grid size-9 place-items-center rounded-full bg-white text-cru-charcoal">
                 <GitBranch className="size-4" aria-hidden="true" />
               </span>
-              Explore Discipleship Tree
+              View Discipleship Tree
             </Link>
 
             <Link
               href="#projects"
-              className="inline-flex h-12 items-center gap-2 rounded-full border border-neutral-900/[0.08] bg-cru-surface px-5 text-sm font-medium text-cru-charcoal transition-colors hover:border-cru-gold/60"
+              className="inline-flex h-12 items-center rounded-full border border-neutral-900/[0.08] bg-cru-surface px-5 text-sm font-medium text-cru-charcoal transition-colors hover:border-cru-gold/60"
             >
-              <span>Campus Activities</span>
-              <ArrowRight className="size-4 text-cru-gold-hover" aria-hidden="true" />
+              See Campus Activities
             </Link>
           </div>
 
           {/* Architectural Metric Strip */}
           <div className="mt-16 grid grid-cols-2 gap-4 border-t border-neutral-900/[0.06] pt-10 md:grid-cols-3 md:gap-8">
             <div>
-              <div className="text-3xl font-semibold tracking-tight text-cru-charcoal md:text-4xl">
+              <div className="font-mono text-3xl font-semibold tracking-tight tabular-nums text-cru-charcoal md:text-4xl">
                 {totalMembers}
               </div>
-              <div className="mt-1 font-mono text-[11px] uppercase tracking-wider text-cru-muted">
+              <div className="mt-1 text-xs font-medium text-cru-muted">
                 Connected Disciples
               </div>
             </div>
             <div>
-              <div className="text-3xl font-semibold tracking-tight text-cru-charcoal md:text-4xl">
+              <div className="font-mono text-3xl font-semibold tracking-tight tabular-nums text-cru-charcoal md:text-4xl">
                 {maxGeneration}
               </div>
-              <div className="mt-1 font-mono text-[11px] uppercase tracking-wider text-cru-muted">
+              <div className="mt-1 text-xs font-medium text-cru-muted">
                 Spiritual Generations
               </div>
             </div>
             <div className="col-span-2 md:col-span-1">
-              <div className="text-3xl font-semibold tracking-tight text-cru-charcoal md:text-4xl">
+              <div className="font-mono text-3xl font-semibold tracking-tight tabular-nums text-cru-charcoal md:text-4xl">
                 {projects.length}
               </div>
-              <div className="mt-1 font-mono text-[11px] uppercase tracking-wider text-cru-muted">
+              <div className="mt-1 text-xs font-medium text-cru-muted">
                 Active Campus Initiatives
               </div>
             </div>
@@ -114,8 +112,8 @@ export default async function HomePage() {
         <DraftingDivider />
 
         {/* Section 2: Interactive Obsidian-Style Discipleship Tree */}
-        <section id="discipleship-tree" className="px-6 py-24 md:px-12">
-          <div className="mb-3 font-mono text-xs uppercase tracking-widest text-[#8a5a00]">
+        <section id="discipleship-tree" className="px-6 py-16 md:px-12 md:py-20">
+          <div className="mb-3 font-mono text-xs font-medium text-[#8a5a00]">
             01 · Spiritual Family Tree
           </div>
           <div className="flex flex-wrap items-end justify-between gap-4">
@@ -149,17 +147,21 @@ export default async function HomePage() {
         <DraftingDivider />
 
         {/* Section 3: Ministry Projects Showcase */}
-        <section id="projects" className="px-6 py-24 md:px-12">
-          <div className="mb-3 font-mono text-xs uppercase tracking-widest text-[#8a5a00]">
-            02 · Campus Ministry
+        <section id="projects" className="px-6 py-20 md:px-12 md:py-24">
+          <div className="md:flex md:items-end md:justify-between md:gap-8">
+            <div>
+              <div className="mb-3 font-mono text-xs font-medium text-[#8a5a00]">
+                02 · Campus Ministry
+              </div>
+              <h2 className="text-2xl font-medium tracking-tight text-cru-charcoal md:text-[32px] md:leading-[42px]">
+                What We Do at VSU
+              </h2>
+            </div>
+            <p className="mt-3 max-w-md text-base leading-relaxed text-cru-muted md:mt-0">
+              Weekly College Life gatherings, small-group Action Groups, and
+              campus outreaches designed for real community.
+            </p>
           </div>
-          <h2 className="text-2xl font-medium tracking-tight text-cru-charcoal md:text-[32px] md:leading-[42px]">
-            What We Do at VSU
-          </h2>
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-cru-muted">
-            Weekly College Life gatherings, small-group Action Groups, and
-            campus outreaches designed for real community.
-          </p>
 
           <MinistryProjectsShowcase projects={projects} />
         </section>
@@ -167,11 +169,10 @@ export default async function HomePage() {
         <DraftingDivider />
 
         {/* Section 4: Join Cru Intake Form */}
-        <section id="join-cru" className="px-6 py-24 md:px-12">
+        <section id="join-cru" className="px-6 pb-24 pt-16 md:px-12 md:pb-28 md:pt-20">
           <div className="grid gap-10 rounded-[28px] border border-neutral-900/[0.07] bg-cru-surface p-7 md:grid-cols-5 md:p-12">
             <div className="md:col-span-2">
-              <div className="mb-3 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#8a5a00]">
-                <Sparkles className="size-3.5" aria-hidden="true" />
+              <div className="mb-3 font-mono text-xs font-medium text-[#8a5a00]">
                 03 · Get Connected
               </div>
               <h2 className="text-2xl font-medium tracking-tight text-cru-charcoal md:text-[32px] md:leading-[40px]">
