@@ -50,14 +50,14 @@ export function JoinCruForm() {
 
   if (status.type === "success") {
     return (
-      <div className="rounded-[24px] border border-cru-gold/50 bg-cru-gold-soft/50 p-8 text-center md:p-10">
+      <div className="rounded-[24px] border border-cru-gold/50 bg-cru-gold-soft/50 p-8 dark:bg-cru-gold/10 text-center md:p-10">
         <div className="mx-auto grid size-14 place-items-center rounded-full bg-cru-gold text-cru-charcoal shadow-xs">
           <CheckCircle2 className="size-7" />
         </div>
-        <h3 className="mt-4 text-xl font-semibold text-cru-charcoal">
+        <h3 className="mt-4 text-xl font-semibold text-cru-charcoal dark:text-cru-ink">
           Request Received!
         </h3>
-        <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-cru-charcoal/80">
+        <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-cru-charcoal/80 dark:text-cru-ink/80">
           {status.message}
         </p>
         <button
@@ -66,7 +66,7 @@ export function JoinCruForm() {
             setInterest("");
             setStatus({ type: "idle" });
           }}
-          className="mt-6 inline-flex h-10 items-center rounded-full border border-neutral-900/10 bg-white px-5 text-xs font-semibold text-cru-charcoal transition-colors hover:border-cru-gold"
+          className="mt-6 inline-flex h-10 items-center rounded-full border border-neutral-900/10 bg-white px-5 text-xs font-semibold text-cru-charcoal transition-colors hover:border-cru-gold dark:border-white/10 dark:bg-white/10 dark:text-cru-ink"
         >
           Submit Another Request
         </button>
@@ -77,7 +77,7 @@ export function JoinCruForm() {
   return (
     <form action={handleSubmit} className="space-y-5">
       {status.type === "error" && status.message && (
-        <div className="flex items-center gap-2.5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-700">
+        <div className="flex items-center gap-2.5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-700 dark:border-red-400/30 dark:bg-red-500/10 dark:text-red-300">
           <AlertCircle className="size-4 shrink-0" />
           <span>{status.message}</span>
         </div>
@@ -87,9 +87,9 @@ export function JoinCruForm() {
         <div>
           <label
             htmlFor="join-fullName"
-            className="mb-1.5 block text-xs font-medium text-cru-charcoal"
+            className="mb-1.5 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
           >
-            Full Name <span className="text-cru-gold-hover">*</span>
+            Full Name <span className="text-cru-gold-hover dark:text-cru-gold">*</span>
           </label>
           <input
             id="join-fullName"
@@ -97,16 +97,16 @@ export function JoinCruForm() {
             type="text"
             required
             placeholder="e.g., Juan Dela Cruz"
-            className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none"
+            className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink dark:placeholder:text-cru-ink-muted/70"
           />
         </div>
 
         <div>
           <label
             htmlFor="join-email"
-            className="mb-1.5 block text-xs font-medium text-cru-charcoal"
+            className="mb-1.5 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
           >
-            Email Address <span className="text-cru-gold-hover">*</span>
+            Email Address <span className="text-cru-gold-hover dark:text-cru-gold">*</span>
           </label>
           <input
             id="join-email"
@@ -114,7 +114,7 @@ export function JoinCruForm() {
             type="email"
             required
             placeholder="juan@vsu.edu.ph"
-            className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none"
+            className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink dark:placeholder:text-cru-ink-muted/70"
           />
         </div>
       </div>
@@ -123,7 +123,7 @@ export function JoinCruForm() {
         <div>
           <label
             htmlFor="join-collegeCourseYear"
-            className="mb-1.5 block text-xs font-medium text-cru-charcoal"
+            className="mb-1.5 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
           >
             College / Degree Program &amp; Year
           </label>
@@ -132,24 +132,24 @@ export function JoinCruForm() {
             name="collegeCourseYear"
             type="text"
             placeholder="e.g., BS Agriculture · 2nd Year"
-            className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none"
+            className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink dark:placeholder:text-cru-ink-muted/70"
           />
         </div>
 
         <div>
           <label
             htmlFor="join-phone"
-            className="mb-1.5 block text-xs font-medium text-cru-charcoal"
+            className="mb-1.5 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
           >
             Phone / Messenger Link{" "}
-            <span className="font-normal text-cru-muted">(Optional)</span>
+            <span className="font-normal text-cru-muted dark:text-cru-ink-muted">(Optional)</span>
           </label>
           <input
             id="join-phone"
             name="phone"
             type="text"
             placeholder="0917 000 0000 or m.me/username"
-            className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none"
+            className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink dark:placeholder:text-cru-ink-muted/70"
           />
         </div>
       </div>
@@ -157,7 +157,7 @@ export function JoinCruForm() {
       <div>
         <label
           htmlFor="join-spiritualInterest"
-          className="mb-1.5 block text-xs font-medium text-cru-charcoal"
+          className="mb-1.5 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
         >
           How can we walk alongside you?
         </label>
@@ -169,7 +169,7 @@ export function JoinCruForm() {
               key={chip}
               type="button"
               onClick={() => setInterest(chip)}
-              className="rounded-full border border-neutral-900/[0.08] bg-white px-3 py-1 text-[11px] text-cru-muted transition-colors hover:border-cru-gold hover:text-cru-charcoal"
+              className="rounded-full border border-neutral-900/[0.08] bg-white px-3 py-1 text-[11px] text-cru-muted transition-colors hover:border-cru-gold hover:text-cru-charcoal dark:border-white/10 dark:bg-white/10 dark:text-cru-ink-muted dark:hover:text-cru-ink"
             >
               + {chip}
             </button>
@@ -183,7 +183,7 @@ export function JoinCruForm() {
           value={interest}
           onChange={(e) => setInterest(e.target.value)}
           placeholder="Tell us what you're looking for—a Bible study, a spiritual mentor, or questions about faith..."
-          className="w-full rounded-2xl border border-neutral-900/[0.09] bg-white p-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none"
+          className="w-full rounded-2xl border border-neutral-900/[0.09] bg-white p-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink dark:placeholder:text-cru-ink-muted/70"
         />
       </div>
 

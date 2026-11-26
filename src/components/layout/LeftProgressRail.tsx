@@ -90,15 +90,15 @@ export function LeftProgressRail({ sections }: LeftProgressRailProps) {
                   isActive
                     ? "bg-cru-gold-hover"
                     : isHovered
-                    ? "bg-cru-charcoal"
-                    : "bg-neutral-900/20"
+                    ? "bg-cru-charcoal dark:bg-cru-ink"
+                    : "bg-neutral-900/20 dark:bg-white/25"
                 )}
                 style={{ transform: `scaleX(${scaleX})` }}
               />
 
               {/* Floating frosted pill label on hover */}
               {isHovered && (
-                <span className="pointer-events-none absolute left-14 whitespace-nowrap rounded-full border border-neutral-900/10 bg-white/95 px-3 py-1 text-xs font-medium text-cru-charcoal shadow-sm backdrop-blur-md">
+                <span className="pointer-events-none absolute left-14 whitespace-nowrap rounded-full border border-neutral-900/10 bg-white/95 px-3 py-1 text-xs font-medium text-cru-charcoal shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-cru-night-surface/95 dark:text-cru-ink">
                   {section.label}
                 </span>
               )}

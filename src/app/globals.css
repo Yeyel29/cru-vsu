@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-cru-gold: #fdb913;
   --color-cru-gold-hover: #eaa400;
@@ -9,6 +11,13 @@
   --color-cru-surface: #fafafa;
   --color-cru-border: rgba(23, 23, 23, 0.07);
 
+  /* Dark theme (lamp off): night canvas, raised surface, readable gold for text */
+  --color-cru-night: #0c0c0e;
+  --color-cru-night-surface: #141417;
+  --color-cru-ink: #f5f5f5;
+  --color-cru-ink-muted: #a3a3a3;
+  --color-cru-gold-text: #8a5a00;
+
   --font-sans: "Inter", "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
@@ -16,15 +25,44 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
     background-color: #ffffff;
     color: #171717;
+    color-scheme: light;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  html.dark {
+    background-color: var(--color-cru-night);
+    color: var(--color-cru-ink);
+    color-scheme: dark;
   }
 
   ::selection {
     background-color: rgba(253, 185, 19, 0.28);
     color: #171717;
+  }
+
+  html.dark ::selection {
+    color: #f5f5f5;
+  }
+
+  /* R-39: every enabled control shows a pointer, disabled ones show not-allowed */
+  a[href],
+  button:not(:disabled),
+  summary,
+  select,
+  label[for],
+  [role="button"],
+  [role="tab"],
+  [role="switch"] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  select:disabled {
+    cursor: not-allowed;
   }
 }
 
@@ -48,4 +86,56 @@
   box-shadow:
     0 20px 50px -15px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.dark .glass-nav {
+  background-color: rgba(28, 28, 32, 0.72);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 10px 35px -10px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.dark .glass-panel {
+  background-color: rgba(24, 24, 28, 0.88);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 20px 50px -15px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/*
+ * Pull-chain lamp: dust motes drift inside the light cone. They only exist while
+ * the lamp is on (the cone is display:none in dark mode), so switching the lamp
+ * off is also the pause control.
+ */
+@keyframes lamp-dust {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.85;
+  }
+  82% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate3d(var(--dust-dx), var(--dust-dy), 0);
+    opacity: 0;
+  }
+}
+
+.lamp-dust {
+  animation: lamp-dust var(--dust-duration) linear infinite;
+  animation-delay: var(--dust-delay);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lamp-dust {
+    animation: none;
+    opacity: 0.45;
+  }
 }

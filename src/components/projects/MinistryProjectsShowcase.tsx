@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Calendar, Layers, ArrowUpRight, X, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { MinistryProject } from "@/types/database";
@@ -25,6 +25,15 @@ export function MinistryProjectsShowcase({
     return ["All", ...unique];
   }, [projects]);
 
+  useEffect(() => {
+    if (!selectedProject) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedProject(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [selectedProject]);
+
   const filteredProjects = useMemo(() => {
     if (activeCategory === "All") return projects;
     return projects.filter((p) => p.category === activeCategory);
@@ -48,7 +57,7 @@ export function MinistryProjectsShowcase({
         <div
           role="tablist"
           aria-label="Filter ministry projects by category"
-          className="inline-flex flex-wrap items-center gap-1 rounded-full bg-neutral-900/[0.04] p-1"
+          className="inline-flex flex-wrap items-center gap-1 rounded-full bg-neutral-900/[0.04] p-1 dark:bg-white/[0.06]"
         >
           {categories.map((cat) => {
             const count =
@@ -67,15 +76,15 @@ export function MinistryProjectsShowcase({
                 className={cn(
                   "inline-flex h-8 items-center gap-2 rounded-full px-3.5 text-xs font-medium transition-all",
                   isActive
-                    ? "bg-white text-cru-charcoal shadow-[0_1px_3px_rgb(0_0_0/0.12)]"
-                    : "text-cru-muted hover:text-cru-charcoal"
+                    ? "bg-white text-cru-charcoal shadow-[0_1px_3px_rgb(0_0_0/0.12)] dark:bg-white/15 dark:text-cru-ink dark:shadow-none"
+                    : "text-cru-muted hover:text-cru-charcoal dark:text-cru-ink-muted dark:hover:text-cru-ink"
                 )}
               >
                 <span>{cat}</span>
                 <span
                   className={cn(
                     "font-mono text-[10px] tabular-nums",
-                    isActive ? "text-cru-gold-hover" : "text-cru-muted/70"
+                    isActive ? "text-cru-gold-hover dark:text-cru-gold" : "text-cru-muted/70 dark:text-cru-ink-muted"
                   )}
                 >
                   {count}
@@ -91,30 +100,30 @@ export function MinistryProjectsShowcase({
         {filteredProjects.map((project) => (
           <article
             key={project.id}
-            className="group flex flex-col justify-between rounded-[24px] border border-neutral-900/[0.07] bg-cru-surface p-7 transition-all hover:border-cru-gold/60 hover:bg-white hover:shadow-[0_16px_40px_-15px_rgba(0,0,0,0.08)]"
+            className="group flex min-w-0 flex-col justify-between rounded-[24px] border border-neutral-900/[0.07] bg-cru-surface p-7 transition-all hover:border-cru-gold/60 hover:bg-white hover:shadow-[0_16px_40px_-15px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-cru-night-surface dark:hover:border-cru-gold/60 dark:hover:bg-cru-night-surface dark:hover:shadow-none"
           >
             <div>
               <div className="mb-5 flex items-center justify-between gap-2">
-                <span className="grid size-10 place-items-center rounded-full bg-cru-gold-soft text-cru-gold-hover transition-colors group-hover:bg-cru-gold group-hover:text-cru-charcoal">
+                <span className="grid size-10 place-items-center rounded-full bg-cru-gold-soft text-cru-gold-hover transition-colors group-hover:bg-cru-gold group-hover:text-cru-charcoal dark:bg-cru-gold/15 dark:text-cru-gold dark:group-hover:bg-cru-gold dark:group-hover:text-cru-charcoal">
                   <Layers className="size-4" />
                 </span>
-                <span className="rounded-full border border-neutral-900/[0.06] bg-white px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-cru-muted">
+                <span className="rounded-full border border-neutral-900/[0.06] bg-white px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-cru-muted dark:border-white/10 dark:bg-white/10 dark:text-cru-ink-muted">
                   {project.category}
                 </span>
               </div>
 
-              <h3 className="text-lg font-semibold tracking-tight text-cru-charcoal">
+              <h3 className="text-lg font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink">
                 {project.title}
               </h3>
 
-              <p className="mt-2.5 text-sm leading-relaxed text-cru-muted">
+              <p className="mt-2.5 text-sm leading-relaxed text-cru-muted dark:text-cru-ink-muted">
                 {project.summary}
               </p>
             </div>
 
-            <div className="mt-6 border-t border-neutral-900/[0.06] pt-4">
+            <div className="mt-6 border-t border-neutral-900/[0.06] pt-4 dark:border-white/[0.08]">
               {project.schedule && (
-                <div className="mb-4 flex items-center gap-2 font-mono text-[11px] text-cru-muted">
+                <div className="mb-4 flex min-w-0 items-center gap-2 font-mono text-[11px] text-cru-muted dark:text-cru-ink-muted">
                   <Calendar className="size-3.5 shrink-0 text-cru-gold-hover" />
                   <span className="truncate">{project.schedule}</span>
                 </div>
@@ -123,7 +132,7 @@ export function MinistryProjectsShowcase({
               <button
                 type="button"
                 onClick={() => setSelectedProject(project)}
-                className="inline-flex w-full items-center justify-between rounded-full border border-neutral-900/[0.08] bg-white px-4 py-2.5 text-xs font-semibold text-cru-charcoal transition-colors hover:border-cru-gold hover:bg-cru-gold-soft/60"
+                className="inline-flex w-full items-center justify-between rounded-full border border-neutral-900/[0.08] bg-white px-4 py-2.5 text-xs font-semibold text-cru-charcoal transition-colors hover:border-cru-gold hover:bg-cru-gold-soft/60 dark:border-white/10 dark:bg-white/10 dark:text-cru-ink dark:hover:bg-white/15"
               >
                 <span>View Details &amp; Get Involved</span>
                 <ArrowUpRight className="size-3.5 text-cru-gold-hover" />
@@ -140,16 +149,19 @@ export function MinistryProjectsShowcase({
           onClick={() => setSelectedProject(null)}
         >
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={selectedProject.title}
             className="glass-panel relative w-full max-w-lg rounded-[28px] p-7 md:p-8"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-cru-gold-soft px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-wider text-amber-800">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-cru-gold-soft px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-wider text-amber-800 dark:bg-cru-gold/15 dark:text-cru-gold">
                   <Sparkles className="size-3" />
                   {selectedProject.category}
                 </span>
-                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-cru-charcoal">
+                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink">
                   {selectedProject.title}
                 </h3>
               </div>
@@ -158,20 +170,20 @@ export function MinistryProjectsShowcase({
                 type="button"
                 onClick={() => setSelectedProject(null)}
                 aria-label="Close modal"
-                className="grid size-9 shrink-0 place-items-center rounded-full border border-neutral-900/[0.08] bg-white text-cru-muted transition-colors hover:text-cru-charcoal"
+                className="grid size-9 shrink-0 place-items-center rounded-full border border-neutral-900/[0.08] bg-white text-cru-muted transition-colors hover:text-cru-charcoal dark:border-white/10 dark:bg-white/10 dark:text-cru-ink-muted dark:hover:text-cru-ink"
               >
                 <X className="size-4" />
               </button>
             </div>
 
             {selectedProject.schedule && (
-              <div className="mt-4 flex items-center gap-2 rounded-2xl border border-neutral-900/[0.06] bg-white px-4 py-3 font-mono text-xs text-cru-charcoal">
+              <div className="mt-4 flex items-center gap-2 rounded-2xl border border-neutral-900/[0.06] bg-white px-4 py-3 font-mono text-xs text-cru-charcoal dark:border-white/10 dark:bg-white/10 dark:text-cru-ink">
                 <Calendar className="size-4 text-cru-gold-hover" />
                 <span>{selectedProject.schedule}</span>
               </div>
             )}
 
-            <p className="mt-5 text-sm leading-relaxed text-cru-charcoal/85">
+            <p className="mt-5 text-sm leading-relaxed text-cru-charcoal/85 dark:text-cru-ink/85">
               {selectedProject.description}
             </p>
 
@@ -179,7 +191,7 @@ export function MinistryProjectsShowcase({
               <button
                 type="button"
                 onClick={() => setSelectedProject(null)}
-                className="h-11 rounded-full px-5 text-xs font-medium text-cru-muted transition-colors hover:text-cru-charcoal"
+                className="h-11 rounded-full px-5 text-xs font-medium text-cru-muted transition-colors hover:text-cru-charcoal dark:text-cru-ink-muted dark:hover:text-cru-ink"
               >
                 Close
               </button>
