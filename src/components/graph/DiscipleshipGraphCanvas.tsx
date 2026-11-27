@@ -10,12 +10,13 @@ import {
   getGenerationColor,
 } from "@/lib/graph/transform";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/components/theme/useTheme";
 import type { DiscipleshipGraphData, GraphNode } from "@/types/database";
 
 const ForceGraph2D = dynamic(() => import("react-force-graph-2d"), {
   ssr: false,
   loading: () => (
-    <div className="flex h-full w-full items-center justify-center font-mono text-xs text-cru-muted">
+    <div className="flex h-full w-full items-center justify-center font-mono text-xs text-cru-muted dark:text-cru-ink-muted">
       Initializing discipleship network...
     </div>
   ),
@@ -52,7 +53,16 @@ export function DiscipleshipGraphCanvas({
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [maxDepthFilter, setMaxDepthFilter] = useState<number | null>(null);
-  const [darkCanvas, setDarkCanvas] = useState(false);
+  // The canvas follows the site theme. The sun/moon button overrides it until the site theme changes.
+  const { theme } = useTheme();
+  const [canvasOverride, setCanvasOverride] = useState<{
+    value: boolean;
+    theme: string;
+  } | null>(null);
+  const darkCanvas =
+    canvasOverride && canvasOverride.theme === theme
+      ? canvasOverride.value
+      : theme === "dark";
 
   // Measure container cleanly for responsive canvas
   useEffect(() => {
@@ -192,7 +202,7 @@ export function DiscipleshipGraphCanvas({
   return (
     <div
       className={cn(
-        "relative flex flex-col overflow-hidden rounded-[24px] border border-neutral-900/[0.08] transition-colors duration-300",
+        "relative flex flex-col overflow-hidden rounded-[24px] border border-neutral-900/[0.08] transition-colors duration-300 dark:border-white/10",
         darkCanvas ? "bg-[#0F1115]" : "bg-[#FAFAFA]",
         compact ? "h-[540px]" : "h-[calc(100vh-8rem)] min-h-[600px]"
       )}
@@ -213,13 +223,13 @@ export function DiscipleshipGraphCanvas({
         {/* Search Bar */}
         <div className="pointer-events-auto relative w-full max-w-xs">
           <div className="glass-nav flex h-10 items-center gap-2 rounded-full px-3.5">
-            <Search className="size-3.5 shrink-0 text-cru-muted" />
+            <Search className="size-3.5 shrink-0 text-cru-muted dark:text-cru-ink-muted" aria-hidden="true" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search person or course..."
-              className="w-full bg-transparent text-xs text-cru-charcoal placeholder:text-cru-muted focus:outline-none"
+              className="w-full bg-transparent text-xs text-cru-charcoal placeholder:text-cru-muted focus:outline-none dark:text-cru-ink dark:placeholder:text-cru-ink-muted"
             />
           </div>
 
@@ -234,12 +244,12 @@ export function DiscipleshipGraphCanvas({
                     focusCameraOnNode(item);
                     setSearchQuery("");
                   }}
-                  className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-xs transition-colors hover:bg-cru-gold-soft"
+                  className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-xs transition-colors hover:bg-cru-gold-soft dark:hover:bg-white/10"
                 >
-                  <span className="font-medium text-cru-charcoal">
+                  <span className="font-medium text-cru-charcoal dark:text-cru-ink">
                     {item.name}
                   </span>
-                  <span className="font-mono text-[10px] text-cru-muted">
+                  <span className="font-mono text-[10px] text-cru-muted dark:text-cru-ink-muted">
                     {item.isRootJesus ? "Center" : `Gen ${item.generationDepth}`}
                   </span>
                 </button>
@@ -267,7 +277,7 @@ export function DiscipleshipGraphCanvas({
                     "h-7 rounded-full px-3 text-[11px] font-medium transition-all",
                     active
                       ? "bg-cru-gold text-cru-charcoal shadow-xs"
-                      : "text-cru-charcoal/70 hover:text-cru-charcoal"
+                      : "text-cru-charcoal/70 hover:text-cru-charcoal dark:text-white/70 dark:hover:text-white"
                   )}
                 >
                   {pill.label}
@@ -280,16 +290,16 @@ export function DiscipleshipGraphCanvas({
             type="button"
             onClick={handleResetCamera}
             title="Reset camera / Zoom to fit"
-            className="glass-nav grid size-9 place-items-center rounded-full text-cru-charcoal transition-transform hover:scale-105"
+            className="glass-nav grid size-9 place-items-center rounded-full text-cru-charcoal transition-transform hover:scale-105 dark:text-cru-ink"
           >
             <RotateCcw className="size-3.5" />
           </button>
 
           <button
             type="button"
-            onClick={() => setDarkCanvas((prev) => !prev)}
+            onClick={() => setCanvasOverride({ value: !darkCanvas, theme })}
             title="Toggle Obsidian Dark / Light Canvas"
-            className="glass-nav grid size-9 place-items-center rounded-full text-cru-charcoal transition-transform hover:scale-105"
+            className="glass-nav grid size-9 place-items-center rounded-full text-cru-charcoal transition-transform hover:scale-105 dark:text-cru-ink"
           >
             {darkCanvas ? (
               <Sun className="size-3.5 text-cru-gold-hover" />
@@ -367,8 +377,8 @@ export function DiscipleshipGraphCanvas({
       </div>
 
       {/* Bottom Legend Bar */}
-      <div className="pointer-events-none relative z-20 flex flex-wrap items-center justify-between gap-3 border-t border-neutral-900/[0.06] bg-white/75 px-4 py-2.5 backdrop-blur-md">
-        <div className="flex flex-wrap items-center gap-4 text-[11px] font-medium text-cru-charcoal">
+      <div className="pointer-events-none relative z-20 flex flex-wrap items-center justify-between gap-3 border-t border-neutral-900/[0.06] bg-white/75 px-4 py-2.5 backdrop-blur-md dark:border-white/10 dark:bg-cru-night/75">
+        <div className="flex flex-wrap items-center gap-4 text-[11px] font-medium text-cru-charcoal dark:text-cru-ink">
           <span className="inline-flex items-center gap-1.5">
             <span className="size-2.5 rounded-full bg-[#FDB913]" />
             Jesus (Root)
@@ -387,7 +397,7 @@ export function DiscipleshipGraphCanvas({
           </span>
         </div>
 
-        <span className="font-mono text-[10px] text-cru-muted">
+        <span className="font-mono text-[10px] text-cru-muted dark:text-cru-ink-muted">
           Click any node to view spiritual lineage · Scroll to zoom · Drag to pan
         </span>
       </div>
