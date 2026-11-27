@@ -1,6 +1,15 @@
 "use client";
 
-import { X, BookOpen, GraduationCap, Heart, Users, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+import {
+  X,
+  BookOpen,
+  GraduationCap,
+  Heart,
+  HeartHandshake,
+  Users,
+  ArrowUpRight,
+} from "lucide-react";
 import {
   getDirectDisciples,
   getGenerationColor,
@@ -207,6 +216,21 @@ export function MemberProfileDrawer({
           )}
         </div>
       </div>
+
+      {!node.isRootJesus && (
+        <div className="border-t border-neutral-900/[0.06] p-4 dark:border-white/10">
+          <Link
+            href={`/give?to=${encodeURIComponent(node.id)}`}
+            className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full border border-neutral-900/10 bg-white px-4 py-2.5 text-xs font-semibold text-cru-charcoal transition-colors hover:border-cru-gold hover:bg-cru-gold-soft/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cru-gold dark:border-white/15 dark:bg-white/10 dark:text-cru-ink dark:hover:border-cru-gold"
+          >
+            <HeartHandshake
+              aria-hidden="true"
+              className="size-3.5 text-cru-gold-text dark:text-cru-gold"
+            />
+            <span>Sow into {node.name.split(/\s+/)[0]}&apos;s ministry</span>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

@@ -3,13 +3,22 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { GitBranch, Home, Layers, LogIn, Menu, X } from "lucide-react";
+import {
+  GitBranch,
+  HeartHandshake,
+  Home,
+  Layers,
+  LogIn,
+  Menu,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/", icon: Home },
   { label: "Tree", href: "/tree", icon: GitBranch },
   { label: "Projects", href: "/#projects", icon: Layers },
+  { label: "Give", href: "/give", icon: HeartHandshake },
 ];
 
 const CHEVRON_ALPHAS = [1, 0.78, 0.54, 0.32, 0.16] as const;

@@ -6,10 +6,13 @@ import { DraftingContainer, DraftingDivider } from "@/components/layout/Drafting
 import {
   AdminConsoleClient,
   type EnrichedApplication,
+  type EnrichedDonation,
   type EnrichedMentorship,
 } from "@/components/admin/AdminConsoleClient";
 import type {
   DisciplerApplication,
+  Donation,
+  GivingChannel,
   JoinInquiry,
   MentorshipRequest,
   MinistryProject,
@@ -37,28 +40,38 @@ export default async function AdminPage() {
     redirect("/dashboard");
   }
 
-  const [appsRes, mentorRes, inqRes, projRes, profilesRes] = await Promise.all([
-    supabase
-      .from("discipler_applications")
-      .select("*")
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("mentorship_requests")
-      .select("*")
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("join_inquiries")
-      .select("*")
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("ministry_projects")
-      .select("*")
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("profiles")
-      .select("*")
-      .order("generation_depth", { ascending: true }),
-  ]);
+  const [appsRes, mentorRes, inqRes, projRes, profilesRes, donationsRes, channelsRes] =
+    await Promise.all([
+      supabase
+        .from("discipler_applications")
+        .select("*")
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("mentorship_requests")
+        .select("*")
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("join_inquiries")
+        .select("*")
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("ministry_projects")
+        .select("*")
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("profiles")
+        .select("*")
+        .order("generation_depth", { ascending: true }),
+      supabase
+        .from("donations")
+        .select("*")
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("giving_channels")
+        .select("*")
+        .order("display_order", { ascending: true })
+        .order("created_at", { ascending: true }),
+    ]);
 
   const allProfiles = (profilesRes.data as Profile[]) ?? [];
   const profileMap = new Map(allProfiles.map((p) => [p.id, p]));
@@ -88,6 +101,26 @@ export default async function AdminPage() {
   const disciplers = allProfiles.filter(
     (p) => p.role === "discipler" || p.role === "admin"
   );
+
+  const donations: EnrichedDonation[] = (
+    (donationsRes.data as Donation[]) ?? []
+  ).map((d) => {
+    const recipientProfile = d.recipient_profile_id
+      ? profileMap.get(d.recipient_profile_id)
+      : null;
+    const recipientName =
+      d.designation_type === "general_fund"
+        ? "General Ministry Fund"
+        : recipientProfile?.full_name ??
+          d.recipient_custom_name ??
+          "Specific Member";
+    return {
+      ...d,
+      recipientName,
+    };
+  });
+
+  const givingChannels = (channelsRes.data as GivingChannel[]) ?? [];
 
   return (
     <main className="min-h-screen bg-white pt-32 pb-20">
@@ -124,6 +157,8 @@ export default async function AdminPage() {
           inquiries={(inqRes.data as JoinInquiry[]) ?? []}
           projects={(projRes.data as MinistryProject[]) ?? []}
           disciplers={disciplers}
+          donations={donations}
+          givingChannels={givingChannels}
         />
       </DraftingContainer>
     </main>

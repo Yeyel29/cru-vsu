@@ -46,6 +46,12 @@ export function SiteFooter() {
               Join Cru
             </Link>
             <Link
+              href="/give"
+              className="transition-colors hover:text-cru-charcoal dark:hover:text-cru-ink"
+            >
+              Give
+            </Link>
+            <Link
               href="/dashboard"
               className="transition-colors hover:text-cru-charcoal dark:hover:text-cru-ink"
             >
