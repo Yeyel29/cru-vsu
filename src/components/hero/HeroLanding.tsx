@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { GitBranch } from "lucide-react";
-import { JourneyIllustration } from "./JourneyIllustration";
 import { WeatherBackdrop } from "./WeatherBackdrop";
-import { GrowingGardenSoil } from "./GrowingGardenSoil";
+import { SeasideHeroScene } from "./SeasideHeroScene";
 
 /**
- * Full-bleed 3-column animated landing hero.
+ * Full-bleed 2-column animated landing hero.
+ * Left: blur-fading "Isolation hurts, Community heals" <-> "Journey Together" + intro & CTAs.
+ * Right: ink-and-watercolor seaside fellowship scene with interactive Sun/Moon theme toggle
+ * and growing coastal plants.
  * Uses IntersectionObserver to pause descendant CSS animations while scrolled off-screen.
  */
 export function HeroLanding() {
@@ -40,30 +42,40 @@ export function HeroLanding() {
       {/* Ambient rain <-> sun sky backdrop */}
       <WeatherBackdrop />
 
-      {/* Foreground 3-column layout */}
-      <div className="relative z-10 mx-auto grid w-full max-w-[1200px] grid-cols-1 items-center gap-10 px-6 pb-24 pt-32 md:px-12 lg:grid-cols-12 lg:gap-8 lg:pb-28 lg:pt-28">
-        {/* Left column: eyebrow, blur-fading headline, CTA pills */}
-        <div className="lg:col-span-4">
+      {/* Foreground 2-column editorial layout */}
+      <div className="relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-1 items-center gap-10 px-6 pb-16 pt-28 md:px-12 lg:grid-cols-12 lg:gap-8 lg:pb-16 lg:pt-24">
+        {/* Left column: eyebrow, blur-fading headline, Cru VSU intro, CTA pills */}
+        <div className="lg:col-span-5">
           <p className="mb-4 text-xs font-medium tracking-wide text-cru-gold-text dark:text-cru-gold">
             Cru · Visayas State University
           </p>
 
-          <h1 className="text-3xl font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink sm:text-4xl lg:text-[40px] lg:leading-[1.12]">
+          <h1 className="text-3xl font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink sm:text-4xl lg:text-[44px] lg:leading-[1.1]">
             <span className="sr-only">
-              Journey Together — Isolation hurts, Community heals
+              Isolation hurts, Community heals — Journey Together
             </span>
             <span
               aria-hidden="true"
               className="grid items-center motion-reduce:flex motion-reduce:flex-col motion-reduce:items-start motion-reduce:gap-2"
             >
               <span className="hero-anim hero-phrase-a col-start-1 row-start-1">
-                Journey Together
+                Isolation hurts, Community heals
               </span>
               <span className="hero-anim hero-phrase-b col-start-1 row-start-1 motion-reduce:text-xl motion-reduce:font-medium motion-reduce:text-cru-muted dark:motion-reduce:text-cru-ink-muted">
-                Isolation hurts, Community heals
+                Journey Together
               </span>
             </span>
           </h1>
+
+          <p className="mt-5 max-w-md text-sm leading-relaxed text-cru-muted dark:text-cru-ink-muted sm:text-[15px]">
+            Here in Cru VSU Student LinC, we are privileged to walk alongside
+            students as they grow in their relationship with Christ and step
+            into their calling as leaders in His kingdom.
+          </p>
+
+          <p className="mt-4 font-mono text-[11px] tracking-wider text-cru-gold-text/90 dark:text-cru-gold/90">
+            WIN · BUILD · SEND
+          </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-3">
             <Link
@@ -85,29 +97,11 @@ export function HeroLanding() {
           </div>
         </div>
 
-        {/* Center column: flat 2D students walking together along a path */}
-        <div className="flex items-center justify-center lg:col-span-4">
-          <JourneyIllustration />
-        </div>
-
-        {/* Right column: Cru VSU Student LinC intro */}
-        <div className="lg:col-span-4 lg:pl-4">
-          <p className="text-xs font-semibold tracking-wide text-cru-charcoal/80 dark:text-cru-ink/80">
-            Cru VSU Student LinC
-          </p>
-          <p className="mt-3 text-sm leading-relaxed text-cru-muted dark:text-cru-ink-muted sm:text-[15px]">
-            Here in Cru VSU Student LinC, we are privileged to walk alongside
-            students as they grow in their relationship with Christ and step
-            into their calling as leaders in His kingdom.
-          </p>
-          <p className="mt-4 font-mono text-[11px] tracking-wider text-cru-gold-text/90 dark:text-cru-gold/90">
-            WIN · BUILD · SEND
-          </p>
+        {/* Right column: seaside ink-and-watercolor community drawing + Sun/Moon toggle + shore plants */}
+        <div className="lg:col-span-7">
+          <SeasideHeroScene />
         </div>
       </div>
-
-      {/* Bottom soil strip & slowly growing pastoral plants */}
-      <GrowingGardenSoil />
     </section>
   );
 }
