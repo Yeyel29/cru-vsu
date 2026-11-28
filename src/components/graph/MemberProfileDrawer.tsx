@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import {
   X,
@@ -35,6 +36,15 @@ export function MemberProfileDrawer({
   onClose,
   onSelectNode,
 }: MemberProfileDrawerProps) {
+  useEffect(() => {
+    if (!node) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [node, onClose]);
+
   if (!node) return null;
 
   const color = getGenerationColor(node.generationDepth, node.isRootJesus);

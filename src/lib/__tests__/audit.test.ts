@@ -13,7 +13,8 @@ import {
   isValidUuid,
   validateDonationFields,
 } from "../giving/validation.ts";
-import type { Profile } from "../../types/database.ts";
+import { findNodeAtScreenPoint } from "../graph/hitTest.ts";
+import type { GraphNode, Profile } from "../../types/database.ts";
 
 function makeProfile(overrides: Partial<Profile> & { id: string; full_name: string }): Profile {
   return {
@@ -159,5 +160,68 @@ describe("donation validation", () => {
       }),
       null
     );
+  });
+});
+
+describe("geometric graph hit-testing", () => {
+  const nodes: GraphNode[] = [
+    {
+      id: JESUS_ROOT_ID,
+      name: "Jesus Christ",
+      avatarUrl: null,
+      collegeProgram: null,
+      testimony: null,
+      favoriteVerse: null,
+      role: "admin",
+      disciplerId: null,
+      generationDepth: 0,
+      isRootJesus: true,
+      x: 0,
+      y: 0,
+    },
+    {
+      id: "node-a",
+      name: "Ate Grace",
+      avatarUrl: null,
+      collegeProgram: null,
+      testimony: null,
+      favoriteVerse: null,
+      role: "discipler",
+      disciplerId: JESUS_ROOT_ID,
+      generationDepth: 1,
+      x: 40,
+      y: 0,
+    },
+    {
+      id: "node-unplaced",
+      name: "Unplaced",
+      avatarUrl: null,
+      collegeProgram: null,
+      testimony: null,
+      favoriteVerse: null,
+      role: "disciple",
+      disciplerId: "node-a",
+      generationDepth: 2,
+    },
+  ];
+
+  const identityProject = (x: number, y: number) => ({ x: x + 200, y: y + 200 });
+
+  it("picks the closest node within grab radius", () => {
+    const hitJesus = findNodeAtScreenPoint(nodes, 205, 203, identityProject, 1);
+    assert.equal(hitJesus?.id, JESUS_ROOT_ID);
+
+    const hitGrace = findNodeAtScreenPoint(nodes, 236, 200, identityProject, 1);
+    assert.equal(hitGrace?.id, "node-a");
+  });
+
+  it("maintains at least a 22px grab radius even when zoomed out", () => {
+    const hit = findNodeAtScreenPoint(nodes, 218, 200, identityProject, 0.25);
+    assert.equal(hit?.id, JESUS_ROOT_ID);
+  });
+
+  it("returns null on empty canvas space and ignores unplaced nodes", () => {
+    const miss = findNodeAtScreenPoint(nodes, 500, 500, identityProject, 1);
+    assert.equal(miss, null);
   });
 });
