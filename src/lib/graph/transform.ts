@@ -41,8 +41,7 @@ export function transformProfilesToGraph(
 
   for (const profile of profiles) {
     const isJesus =
-      profile.id === JESUS_ROOT_ID ||
-      Boolean((profile as Profile & { is_root_jesus?: boolean }).is_root_jesus);
+      profile.id === JESUS_ROOT_ID || Boolean(profile.is_root_jesus);
 
     nodeMap.set(profile.id, {
       id: profile.id,

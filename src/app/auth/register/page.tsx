@@ -48,13 +48,21 @@ export default function RegisterPage() {
 
     if (data.user && data.session) {
       // Create their public.profiles row right away
-      await supabase.from("profiles").insert({
+      const { error: profileError } = await supabase.from("profiles").insert({
         auth_user_id: data.user.id,
         full_name: fullName.trim(),
         college_program: collegeProgram.trim() || null,
         role: "disciple",
         generation_depth: 1,
       });
+
+      if (profileError) {
+        setError(
+          "Account created, but we could not initialize your profile. Please sign in to retry."
+        );
+        setLoading(false);
+        return;
+      }
 
       router.push("/dashboard");
       router.refresh();
@@ -66,30 +74,30 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white pt-32 pb-20">
+    <main className="min-h-screen bg-white pt-32 pb-20 dark:bg-cru-night">
       <DraftingContainer className="flex min-h-[70vh] items-center justify-center px-6 py-12">
-        <div className="w-full max-w-md rounded-[28px] border border-neutral-900/[0.08] bg-cru-surface p-8 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.06)]">
+        <div className="w-full max-w-md rounded-[28px] border border-neutral-900/[0.08] bg-cru-surface p-8 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.06)] dark:border-white/10 dark:bg-cru-night-surface">
           <div className="mb-6">
-            <div className="mb-2 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-cru-gold-hover">
+            <div className="mb-2 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-cru-gold-text dark:text-cru-gold">
               <span className="size-2 rounded-full bg-cru-gold" />
               Cru-VSU · Member Registration
             </div>
-            <h1 className="text-2xl font-semibold tracking-tight text-cru-charcoal">
+            <h1 className="text-2xl font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink">
               Join the Member Portal
             </h1>
-            <p className="mt-1.5 text-sm text-cru-muted">
+            <p className="mt-1.5 text-sm text-cru-muted dark:text-cru-ink-muted">
               Create your account to request a discipler, apply as a discipler,
               or build your spiritual family tree.
             </p>
           </div>
 
           {needsEmailConfirm ? (
-            <div className="rounded-2xl border border-cru-gold/50 bg-cru-gold-soft/60 p-6 text-center">
-              <CheckCircle2 className="mx-auto size-8 text-cru-gold-hover" />
-              <h2 className="mt-3 text-base font-semibold text-cru-charcoal">
+            <div className="rounded-2xl border border-cru-gold/50 bg-cru-gold-soft/60 p-6 text-center dark:bg-cru-gold/10">
+              <CheckCircle2 className="mx-auto size-8 text-cru-gold-hover dark:text-cru-gold" />
+              <h2 className="mt-3 text-base font-semibold text-cru-charcoal dark:text-cru-ink">
                 Check Your Email
               </h2>
-              <p className="mt-1.5 text-xs leading-relaxed text-cru-charcoal/80">
+              <p className="mt-1.5 text-xs leading-relaxed text-cru-charcoal/80 dark:text-cru-ink/80">
                 We sent a confirmation link to <strong>{email}</strong>. Once
                 confirmed, sign in to enter your Member Dashboard.
               </p>
@@ -103,7 +111,7 @@ export default function RegisterPage() {
           ) : (
             <>
               {error && (
-                <div className="mb-5 flex items-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-700">
+                <div className="mb-5 flex items-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-700 dark:border-red-400/30 dark:bg-red-500/10 dark:text-red-300">
                   <AlertCircle className="size-4 shrink-0" />
                   <span>{error}</span>
                 </div>
@@ -113,7 +121,7 @@ export default function RegisterPage() {
                 <div>
                   <label
                     htmlFor="reg-name"
-                    className="mb-1.5 block text-xs font-medium text-cru-charcoal"
+                    className="mb-1.5 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
                   >
                     Full Name
                   </label>
@@ -124,14 +132,14 @@ export default function RegisterPage() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="e.g., Maria Santos"
-                    className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none"
+                    className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="reg-program"
-                    className="mb-1.5 block text-xs font-medium text-cru-charcoal"
+                    className="mb-1.5 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
                   >
                     College / Degree Program &amp; Year
                   </label>
@@ -141,14 +149,14 @@ export default function RegisterPage() {
                     value={collegeProgram}
                     onChange={(e) => setCollegeProgram(e.target.value)}
                     placeholder="e.g., BS Computer Science, 2nd Year"
-                    className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none"
+                    className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="reg-email"
-                    className="mb-1.5 block text-xs font-medium text-cru-charcoal"
+                    className="mb-1.5 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
                   >
                     Email Address
                   </label>
@@ -159,14 +167,14 @@ export default function RegisterPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@vsu.edu.ph"
-                    className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none"
+                    className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="reg-password"
-                    className="mb-1.5 block text-xs font-medium text-cru-charcoal"
+                    className="mb-1.5 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
                   >
                     Password (min 6 characters)
                   </label>
@@ -178,7 +186,7 @@ export default function RegisterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none"
+                    className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink"
                   />
                 </div>
 
@@ -198,11 +206,11 @@ export default function RegisterPage() {
                 </button>
               </form>
 
-              <p className="mt-6 text-center text-xs text-cru-muted">
+              <p className="mt-6 text-center text-xs text-cru-muted dark:text-cru-ink-muted">
                 Already have an account?{" "}
                 <Link
                   href="/auth/login"
-                  className="font-semibold text-cru-charcoal underline decoration-cru-gold underline-offset-4 hover:text-cru-gold-hover"
+                  className="font-semibold text-cru-charcoal underline decoration-cru-gold underline-offset-4 hover:text-cru-gold-hover dark:text-cru-ink dark:hover:text-cru-gold"
                 >
                   Sign In
                 </Link>

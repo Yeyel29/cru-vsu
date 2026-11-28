@@ -32,7 +32,7 @@ export default async function DashboardPage() {
     .from("profiles")
     .select("*")
     .eq("auth_user_id", user.id)
-    .single();
+    .maybeSingle();
 
   if (!profile) {
     const meta = user.user_metadata ?? {};
@@ -46,17 +46,34 @@ export default async function DashboardPage() {
         generation_depth: 1,
       })
       .select("*")
-      .single();
+      .maybeSingle();
     profile = created;
   }
 
   if (!profile) {
     return (
-      <main className="min-h-screen bg-white pt-36 pb-20">
+      <main className="min-h-screen bg-white pt-36 pb-20 dark:bg-cru-night">
         <DraftingContainer className="px-6 py-12">
-          <p className="text-sm text-cru-muted">
+          <p className="text-sm text-cru-muted dark:text-cru-ink-muted">
             Could not load member profile. Please try signing in again.
           </p>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <form action={signOutAction}>
+              <button
+                type="submit"
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-neutral-900/10 bg-white px-4 text-xs font-medium text-cru-charcoal transition-colors hover:border-cru-gold dark:border-white/10 dark:bg-cru-night-surface dark:text-cru-ink"
+              >
+                <LogOut className="size-3.5" />
+                <span>Sign Out</span>
+              </button>
+            </form>
+            <Link
+              href="/auth/login"
+              className="text-xs font-semibold text-cru-charcoal underline decoration-cru-gold underline-offset-4 dark:text-cru-ink"
+            >
+              Return to Sign In
+            </Link>
+          </div>
         </DraftingContainer>
       </main>
     );
@@ -96,19 +113,19 @@ export default async function DashboardPage() {
     typedProfile.role === "discipler" || typedProfile.role === "admin";
 
   return (
-    <main className="min-h-screen bg-white pt-32 pb-20">
+    <main className="min-h-screen bg-white pt-32 pb-20 dark:bg-cru-night">
       <DraftingContainer className="px-6 py-10 md:px-12">
         {/* Top Member Header */}
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
-            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-neutral-900/[0.08] bg-cru-surface px-3.5 py-1 font-mono text-[11px] uppercase tracking-wider text-cru-charcoal">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-neutral-900/[0.08] bg-cru-surface px-3.5 py-1 font-mono text-[11px] uppercase tracking-wider text-cru-charcoal dark:border-white/10 dark:bg-cru-night-surface dark:text-cru-ink">
               <span className="size-2 rounded-full bg-cru-gold" />
               Role: {typedProfile.role} · Gen {typedProfile.generation_depth}
             </div>
-            <h1 className="text-3xl font-semibold tracking-tight text-cru-charcoal">
+            <h1 className="text-3xl font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink">
               Welcome, {typedProfile.full_name}
             </h1>
-            <p className="mt-1 text-sm text-cru-muted">
+            <p className="mt-1 text-sm text-cru-muted dark:text-cru-ink-muted">
               {user.email}
             </p>
           </div>
@@ -129,9 +146,9 @@ export default async function DashboardPage() {
             {typedProfile.role === "admin" && (
               <Link
                 href="/admin"
-                className="inline-flex h-11 items-center gap-2 rounded-full border border-neutral-900/10 bg-cru-surface px-4 text-xs font-semibold text-cru-charcoal transition-colors hover:border-cru-gold"
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-neutral-900/10 bg-cru-surface px-4 text-xs font-semibold text-cru-charcoal transition-colors hover:border-cru-gold dark:border-white/10 dark:bg-cru-night-surface dark:text-cru-ink"
               >
-                <ShieldCheck className="size-4 text-cru-gold-hover" />
+                <ShieldCheck className="size-4 text-cru-gold-hover dark:text-cru-gold" />
                 <span>Admin Console</span>
               </Link>
             )}
@@ -139,7 +156,7 @@ export default async function DashboardPage() {
             <form action={signOutAction}>
               <button
                 type="submit"
-                className="inline-flex h-11 items-center gap-2 rounded-full border border-neutral-900/10 bg-white px-4 text-xs font-medium text-cru-muted transition-colors hover:text-cru-charcoal"
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-neutral-900/10 bg-white px-4 text-xs font-medium text-cru-muted transition-colors hover:text-cru-charcoal dark:border-white/10 dark:bg-cru-night-surface dark:text-cru-ink-muted dark:hover:text-cru-ink"
               >
                 <LogOut className="size-3.5" />
                 <span>Sign Out</span>
@@ -150,19 +167,19 @@ export default async function DashboardPage() {
 
         {/* Spiritual Parent Banner */}
         {discipler && (
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-[20px] border border-cru-gold/40 bg-cru-gold-soft/50 px-6 py-4">
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-[20px] border border-cru-gold/40 bg-cru-gold-soft/50 px-6 py-4 dark:bg-cru-gold/10">
             <div className="flex items-center gap-3">
               <span className="grid size-10 place-items-center rounded-full bg-cru-gold text-cru-charcoal">
                 <UserCheck className="size-5" />
               </span>
               <div>
-                <div className="font-mono text-[10px] uppercase tracking-wider text-amber-800">
+                <div className="font-mono text-[10px] uppercase tracking-wider text-amber-800 dark:text-cru-gold">
                   Your Spiritual Parent (Mom / Dad)
                 </div>
-                <div className="text-sm font-semibold text-cru-charcoal">
+                <div className="text-sm font-semibold text-cru-charcoal dark:text-cru-ink">
                   {discipler.full_name}
                   {discipler.college_program && (
-                    <span className="ml-2 font-normal text-cru-muted">
+                    <span className="ml-2 font-normal text-cru-muted dark:text-cru-ink-muted">
                       · {discipler.college_program}
                     </span>
                   )}
@@ -172,7 +189,7 @@ export default async function DashboardPage() {
 
             <Link
               href="/tree"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-cru-charcoal hover:text-cru-gold-hover"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-cru-charcoal hover:text-cru-gold-hover dark:text-cru-ink dark:hover:text-cru-gold"
             >
               <span>View in Main Tree</span>
               <ArrowRight className="size-3.5" />

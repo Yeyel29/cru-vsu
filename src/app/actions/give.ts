@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { validateDonationFields } from "@/lib/giving/validation";
 import type { DonationDesignationType } from "@/types/database";
 
 export interface SubmitDonationResult {
@@ -56,42 +57,22 @@ export async function submitDonationRecord(
   const message = String(formData.get("message") ?? "").trim();
   const receiptFile = formData.get("receiptFile");
 
-  if (
-    designationType === "specific_person" &&
-    !recipientProfileId &&
-    !recipientCustomName
-  ) {
-    return {
-      success: false,
-      message: "Please select a person or enter their name for this gift.",
-    };
-  }
+  const validationError = validateDonationFields({
+    designationType,
+    recipientProfileId,
+    recipientCustomName,
+    amountPhp,
+    channelId,
+    channelNameSnapshot,
+    isAnonymous,
+    donorName,
+    donorEmail,
+  });
 
-  if (!Number.isFinite(amountPhp) || amountPhp <= 0 || amountPhp > 10000000) {
+  if (validationError) {
     return {
       success: false,
-      message: "Please enter a valid amount in Philippine Pesos (PHP).",
-    };
-  }
-
-  if (!channelNameSnapshot) {
-    return {
-      success: false,
-      message: "Please indicate which Cru EV channel you used for the transfer.",
-    };
-  }
-
-  if (!isAnonymous && donorName.length < 2) {
-    return {
-      success: false,
-      message: "Please enter your name, or check Give anonymously.",
-    };
-  }
-
-  if (donorEmail && !donorEmail.includes("@")) {
-    return {
-      success: false,
-      message: "Please enter a valid email address or leave it blank.",
+      message: validationError,
     };
   }
 
@@ -167,6 +148,11 @@ export async function submitDonationRecord(
   });
 
   if (insertError) {
+    if (receiptStoragePath) {
+      await supabase.storage
+        .from("giving-receipts")
+        .remove([receiptStoragePath]);
+    }
     return {
       success: false,
       message: "Could not record your gift right now. Please try again.",

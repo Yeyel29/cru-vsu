@@ -9,7 +9,7 @@ import {
   getAncestryPath,
   getGenerationColor,
 } from "@/lib/graph/transform";
-import { cn } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
 import { useTheme } from "@/components/theme/useTheme";
 import type { DiscipleshipGraphData, GraphNode } from "@/types/database";
 
@@ -28,12 +28,6 @@ interface DiscipleshipGraphCanvasProps {
   onSelectNode: (node: GraphNode) => void;
   compact?: boolean;
   fullScreenHref?: string;
-}
-
-function getInitials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
 }
 
 /**

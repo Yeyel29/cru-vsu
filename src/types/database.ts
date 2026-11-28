@@ -20,6 +20,7 @@ export interface Profile {
   role: UserRole;
   discipler_id: string | null;
   generation_depth: number;
+  is_root_jesus?: boolean;
   created_at: string;
   updated_at: string;
 }
