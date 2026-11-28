@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/components/theme/useTheme";
+import { cn } from "@/lib/utils";
 
 /** Pull distance (px) the chain must pass before letting go switches the lamp. */
 const CATCH_DISTANCE = 26;
@@ -105,12 +107,37 @@ function createSpring(render: (y: number) => void) {
  * never flashes a lit lamp before hydration.
  */
 export function PullChainLamp() {
+  const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+  const [hiddenForHero, setHiddenForHero] = useState(pathname === "/");
 
   const handleRef = useRef<SVGGElement>(null);
   const chainRef = useRef<SVGLineElement>(null);
   const springRef = useRef<ReturnType<typeof createSpring> | null>(null);
   const gesture = useRef({ active: false, startY: 0, maxPull: 0, moved: 0 });
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      setHiddenForHero(false);
+      return;
+    }
+
+    const hero = document.getElementById("overview");
+    if (!hero || typeof IntersectionObserver === "undefined") {
+      setHiddenForHero(false);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setHiddenForHero(entry.isIntersecting);
+      },
+      { threshold: 0.12 }
+    );
+
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, [pathname]);
 
   useEffect(() => {
     const spring = createSpring((y) => {
@@ -169,7 +196,14 @@ export function PullChainLamp() {
 
   return (
     // The outer box clips at the viewport edge so the light cone never adds horizontal scroll.
-    <div className="pointer-events-none fixed right-0 top-0 z-[60] h-[170px] w-[160px] overflow-hidden">
+    // On the landing page, the lamp stays tucked away while the hero Sun/Moon toggle is in view.
+    <div
+      aria-hidden={hiddenForHero || undefined}
+      className={cn(
+        "pointer-events-none fixed right-0 top-0 z-[60] h-[170px] w-[160px] overflow-hidden transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
+        hiddenForHero ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
+      )}
+    >
       <div className="absolute right-1.5 top-0 h-[150px] w-[72px] sm:right-6">
         <svg
           viewBox="0 0 72 150"
@@ -245,12 +279,16 @@ export function PullChainLamp() {
         aria-checked={theme === "light"}
         aria-label="Light mode"
         title="Pull the chain to switch between light and dark"
+        tabIndex={hiddenForHero ? -1 : 0}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerCancel}
         onClick={handleClick}
-        className="pointer-events-auto absolute left-[28px] top-[76px] h-[56px] w-[44px] touch-none select-none rounded-md cursor-grab active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cru-charcoal dark:focus-visible:outline-cru-ink"
+        className={cn(
+          "absolute left-[28px] top-[76px] h-[56px] w-[44px] touch-none select-none rounded-md cursor-grab active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cru-charcoal dark:focus-visible:outline-cru-ink",
+          hiddenForHero ? "pointer-events-none" : "pointer-events-auto"
+        )}
       />
       </div>
     </div>
