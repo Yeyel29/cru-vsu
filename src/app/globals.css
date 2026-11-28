@@ -133,9 +133,81 @@
   opacity: 0;
 }
 
+/*
+ * Animated landing hero: blur-fade headline cycle and off-screen pause hook.
+ */
+@keyframes hero-phrase-a {
+  0%,
+  38% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate3d(0, 0, 0);
+  }
+  48% {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translate3d(0, -4px, 0);
+  }
+  88% {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translate3d(0, 4px, 0);
+  }
+  98%,
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hero-phrase-b {
+  0%,
+  42% {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translate3d(0, 4px, 0);
+  }
+  52%,
+  88% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate3d(0, 0, 0);
+  }
+  98%,
+  100% {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+.hero-phrase-a {
+  animation: hero-phrase-a 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: opacity, filter, transform;
+}
+
+.hero-phrase-b {
+  animation: hero-phrase-b 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: opacity, filter, transform;
+}
+
+[data-paused="true"] .hero-anim {
+  animation-play-state: paused !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .lamp-dust {
     animation: none;
     opacity: 0.45;
+  }
+
+  .hero-phrase-a,
+  .hero-phrase-b {
+    animation: none;
+    opacity: 1;
+    filter: none;
+    transform: none;
+    will-change: auto;
   }
 }

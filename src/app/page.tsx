@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GitBranch, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import {
   DraftingContainer,
   DraftingDivider,
@@ -8,6 +8,7 @@ import {
   LeftProgressRail,
   type RailSection,
 } from "@/components/layout/LeftProgressRail";
+import { HeroLanding } from "@/components/hero/HeroLanding";
 import { DiscipleshipExplorer } from "@/components/graph/DiscipleshipExplorer";
 import { MinistryProjectsShowcase } from "@/components/projects/MinistryProjectsShowcase";
 import { JoinCruForm } from "@/components/intake/JoinCruForm";
@@ -39,49 +40,16 @@ export default async function HomePage() {
     <main className="min-h-screen bg-white dark:bg-cru-night">
       <LeftProgressRail sections={HOME_SECTIONS} />
 
+      {/* Section 1: Full-Bleed Animated Hero */}
+      <HeroLanding />
+
       <DraftingContainer>
-        {/* Section 1: Hero / Overview */}
-        <section id="overview" className="px-6 pb-20 pt-36 md:px-12 md:pt-44">
-          <p className="mb-4 text-sm font-medium text-cru-gold-text dark:text-cru-gold">
-            Cru · Visayas State University
-          </p>
-
-          <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink md:text-6xl md:leading-[1.08]">
-            Helping VSU students know{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">Jesus</span>
-              <span className="absolute bottom-1 left-0 right-0 -z-0 h-3 rounded-sm bg-cru-gold/40" />
-            </span>
-            , grow in faith, and multiply.
-          </h1>
-
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-cru-muted dark:text-cru-ink-muted">
-            Here in Cru VSU Student LinC, we are privileged to walk alongside
-            students as they grow in their relationship with Christ and step
-            into their calling as leaders in His kingdom.
-          </p>
-
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link
-              href="/tree"
-              className="inline-flex h-12 items-center gap-3 rounded-full bg-cru-gold p-1.5 pr-6 text-sm font-semibold text-cru-charcoal shadow-sm transition-colors hover:bg-cru-gold-hover"
-            >
-              <span className="grid size-9 place-items-center rounded-full bg-white text-cru-charcoal">
-                <GitBranch className="size-4" aria-hidden="true" />
-              </span>
-              View Discipleship Tree
-            </Link>
-
-            <Link
-              href="#projects"
-              className="inline-flex h-12 items-center rounded-full border border-neutral-900/[0.08] bg-cru-surface px-5 text-sm font-medium text-cru-charcoal transition-colors hover:border-cru-gold/60 dark:border-white/10 dark:bg-cru-night-surface dark:text-cru-ink dark:hover:border-cru-gold/60"
-            >
-              Explore Campus Ministries
-            </Link>
-          </div>
-
-          {/* Architectural Metric Strip */}
-          <div className="mt-16 grid grid-cols-2 gap-4 border-t border-neutral-900/[0.06] dark:border-white/[0.08] pt-10 md:grid-cols-3 md:gap-8">
+        {/* Architectural Metric Strip */}
+        <section
+          aria-label="Ministry impact summary"
+          className="px-6 py-10 md:px-12 md:py-12"
+        >
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-8">
             <div>
               <div className="font-mono text-3xl font-semibold tracking-tight tabular-nums text-cru-charcoal dark:text-cru-ink md:text-4xl">
                 {totalMembers}
