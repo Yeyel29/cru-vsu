@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { GitBranch } from "lucide-react";
 import { JourneyIllustration } from "./JourneyIllustration";
 import { WeatherBackdrop } from "./WeatherBackdrop";
+import { GrowingGardenSoil } from "./GrowingGardenSoil";
 
 /**
  * Full-bleed 3-column animated landing hero.
@@ -104,6 +105,9 @@ export function HeroLanding() {
           </p>
         </div>
       </div>
+
+      {/* Bottom soil strip & slowly growing pastoral plants */}
+      <GrowingGardenSoil />
     </section>
   );
 }
