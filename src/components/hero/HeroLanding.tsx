@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { GitBranch } from "lucide-react";
 import { JourneyIllustration } from "./JourneyIllustration";
+import { WeatherBackdrop } from "./WeatherBackdrop";
 
 /**
  * Full-bleed 3-column animated landing hero.
@@ -35,6 +36,9 @@ export function HeroLanding() {
       data-paused={paused ? "true" : "false"}
       className="relative flex min-h-[100svh] w-full flex-col justify-center overflow-hidden border-b border-neutral-900/[0.06] bg-white dark:border-white/[0.08] dark:bg-cru-night"
     >
+      {/* Ambient rain <-> sun sky backdrop */}
+      <WeatherBackdrop />
+
       {/* Foreground 3-column layout */}
       <div className="relative z-10 mx-auto grid w-full max-w-[1200px] grid-cols-1 items-center gap-10 px-6 pb-24 pt-32 md:px-12 lg:grid-cols-12 lg:gap-8 lg:pb-28 lg:pt-28">
         {/* Left column: eyebrow, blur-fading headline, CTA pills */}

@@ -192,6 +192,86 @@
   will-change: opacity, filter, transform;
 }
 
+/* Coupled 18s rain -> sun weather cycle (starts in rain to water the soil) */
+@keyframes hero-rain-layer {
+  0%,
+  36% {
+    opacity: 1;
+  }
+  48%,
+  88% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-sun-layer {
+  0%,
+  36% {
+    opacity: 0;
+  }
+  48%,
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes hero-rain-fall {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(-11deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--rain-alpha, 0.35);
+  }
+  85% {
+    opacity: var(--rain-alpha, 0.35);
+  }
+  100% {
+    transform: translate3d(-44px, 108vh, 0) rotate(-11deg);
+    opacity: 0;
+  }
+}
+
+@keyframes hero-cloud-drift {
+  0% {
+    transform: translate3d(-8%, 0, 0);
+  }
+  50% {
+    transform: translate3d(8%, 0, 0);
+  }
+  100% {
+    transform: translate3d(-8%, 0, 0);
+  }
+}
+
+.hero-rain-layer {
+  animation: hero-rain-layer 18s ease-in-out infinite;
+  will-change: opacity;
+}
+
+.hero-sun-layer {
+  animation: hero-sun-layer 18s ease-in-out infinite;
+  will-change: opacity;
+}
+
+.hero-rain-drop {
+  animation: hero-rain-fall var(--rain-duration) linear infinite;
+  animation-delay: var(--rain-delay);
+  will-change: transform, opacity;
+}
+
+.hero-cloud {
+  animation: hero-cloud-drift var(--cloud-duration) ease-in-out infinite;
+  animation-delay: var(--cloud-delay);
+  will-change: transform;
+}
+
 [data-paused="true"] .hero-anim {
   animation-play-state: paused !important;
 }
@@ -207,6 +287,25 @@
     animation: none;
     opacity: 1;
     filter: none;
+    transform: none;
+    will-change: auto;
+  }
+
+  .hero-rain-layer,
+  .hero-rain-drop {
+    animation: none;
+    opacity: 0;
+    will-change: auto;
+  }
+
+  .hero-sun-layer {
+    animation: none;
+    opacity: 1;
+    will-change: auto;
+  }
+
+  .hero-cloud {
+    animation: none;
     transform: none;
     will-change: auto;
   }
