@@ -20,9 +20,9 @@ export function SiteFooter() {
               </span>
             </div>
             <p className="mt-2 max-w-md text-xs leading-relaxed text-cru-muted dark:text-cru-ink-muted">
-              A caring campus community passionate about connecting VSU students
-              to Jesus Christ, building them in faith, and sending spiritual
-              multipliers.
+              A Christ-centered campus movement at Visayas State University
+              committed to winning students to Jesus Christ, building them in
+              their faith, and sending spiritual multipliers.
             </p>
           </div>
 

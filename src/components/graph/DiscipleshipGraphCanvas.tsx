@@ -547,7 +547,7 @@ export function DiscipleshipGraphCanvas({
                 ? "Switch graph canvas to light mode"
                 : "Switch graph canvas to dark mode"
             }
-            title="Toggle Obsidian Dark / Light Canvas"
+            title="Toggle Dark / Light Canvas"
             className="glass-nav grid size-9 place-items-center rounded-full text-cru-charcoal transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cru-gold dark:text-cru-ink"
           >
             {darkCanvas ? (
@@ -605,7 +605,7 @@ export function DiscipleshipGraphCanvas({
         <div className="flex flex-wrap items-center gap-4 text-[11px] font-medium text-cru-charcoal dark:text-cru-ink">
           <span className="inline-flex items-center gap-1.5">
             <span className="size-2.5 rounded-full bg-[#FDB913]" />
-            Jesus (Root)
+            Jesus Christ (Center)
           </span>
           <span className="inline-flex items-center gap-1.5">
             <span className="size-2.5 rounded-full bg-[#D97706]" />
@@ -622,7 +622,7 @@ export function DiscipleshipGraphCanvas({
         </div>
 
         <span className="font-mono text-[10px] text-cru-muted dark:text-cru-ink-muted">
-          Click any node to view spiritual lineage · Scroll to zoom · Drag to pan
+          Click any node to view lineage · Drag any node to arrange · Scroll to zoom
         </span>
       </div>
     </div>

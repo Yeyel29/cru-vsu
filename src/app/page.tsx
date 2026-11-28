@@ -56,9 +56,9 @@ export default async function HomePage() {
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-cru-muted dark:text-cru-ink-muted">
-            A student-led campus movement built on authentic relationships, where
-            spiritual moms and dads walk alongside disciples, rooted in Jesus at
-            the center of it all.
+            Here in Cru VSU Student LinC, we are privileged to walk alongside
+            students as they grow in their relationship with Christ and step
+            into their calling as leaders in His kingdom.
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -76,7 +76,7 @@ export default async function HomePage() {
               href="#projects"
               className="inline-flex h-12 items-center rounded-full border border-neutral-900/[0.08] bg-cru-surface px-5 text-sm font-medium text-cru-charcoal transition-colors hover:border-cru-gold/60 dark:border-white/10 dark:bg-cru-night-surface dark:text-cru-ink dark:hover:border-cru-gold/60"
             >
-              See Campus Activities
+              Explore Campus Ministries
             </Link>
           </div>
 
@@ -111,19 +111,20 @@ export default async function HomePage() {
 
         <DraftingDivider />
 
-        {/* Section 2: Interactive Obsidian-Style Discipleship Tree */}
+        {/* Section 2: Interactive Discipleship Tree */}
         <section id="discipleship-tree" className="px-6 py-16 md:px-12 md:py-20">
           <div className="mb-3 font-mono text-xs font-medium text-cru-gold-text dark:text-cru-gold">
-            01 · Spiritual Family Tree
+            01 · Spiritual Multiplication
           </div>
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <h2 className="text-2xl font-medium tracking-tight text-cru-charcoal dark:text-cru-ink md:text-[32px] md:leading-[42px]">
-                Obsidian-Style Discipleship Network
+                Generations of Discipleship
               </h2>
               <p className="mt-3 max-w-2xl text-base leading-relaxed text-cru-muted dark:text-cru-ink-muted">
-                Every student&apos;s spiritual walk connects back through their
-                discipler (their spiritual mom or dad) to Jesus Christ at the center.
+                Trace how the Gospel multiplies across Visayas State University
+                through intentional, life-on-life mentorship, with every
+                spiritual generation rooted in Jesus Christ (2 Timothy 2:2).
               </p>
             </div>
             <Link
@@ -151,15 +152,15 @@ export default async function HomePage() {
           <div className="md:flex md:items-end md:justify-between md:gap-8">
             <div>
               <div className="mb-3 font-mono text-xs font-medium text-cru-gold-text dark:text-cru-gold">
-                02 · Campus Ministry
+                02 · Campus Ministries
               </div>
               <h2 className="text-2xl font-medium tracking-tight text-cru-charcoal dark:text-cru-ink md:text-[32px] md:leading-[42px]">
                 What We Do at VSU
               </h2>
             </div>
             <p className="mt-3 max-w-md text-base leading-relaxed text-cru-muted dark:text-cru-ink-muted md:mt-0">
-              Weekly College Life gatherings, small-group Action Groups, and
-              campus outreaches designed for real community.
+              Weekly College Life Meetings, small-group Action Groups, and
+              Gospel-centered campus outreach rooted in Scripture and fellowship.
             </p>
           </div>
 
@@ -176,32 +177,27 @@ export default async function HomePage() {
                 03 · Get Connected
               </div>
               <h2 className="text-2xl font-medium tracking-tight text-cru-charcoal dark:text-cru-ink md:text-[32px] md:leading-[40px]">
-                Ask to Join Cru VSU
+                Connect with Cru VSU
               </h2>
               <p className="mt-4 text-sm leading-relaxed text-cru-muted dark:text-cru-ink-muted">
-                Whether you&apos;re a freshman looking for friends, wanting to
-                explore Christianity, or seeking a spiritual mom or dad to walk
-                with you through college, we&apos;d love to meet you.
+                Whether you want to discover and begin your walk of faith, grow
+                deeper in your relationship with the Lord, or find a
+                Christ-centered community to journey with at VSU, we would be
+                honored to walk alongside you.
               </p>
 
-              <div className="mt-8 space-y-3 border-t border-neutral-900/[0.06] dark:border-white/[0.08] pt-6">
-                <div className="flex items-center gap-2.5 text-xs text-cru-charcoal dark:text-cru-ink">
-                  <span className="size-2 rounded-full bg-cru-gold" />
-                  <span>
-                    <strong>Win:</strong> Welcoming conversations &amp; outreach
-                  </span>
+              <div className="mt-8 space-y-3 border-t border-neutral-900/[0.06] pt-6 dark:border-white/[0.08]">
+                <div className="text-xs leading-relaxed text-cru-charcoal dark:text-cru-ink">
+                  <strong className="font-semibold">Win:</strong> Sharing the
+                  Gospel of Jesus Christ across campus
                 </div>
-                <div className="flex items-center gap-2.5 text-xs text-cru-charcoal dark:text-cru-ink">
-                  <span className="size-2 rounded-full bg-cru-gold" />
-                  <span>
-                    <strong>Build:</strong> Life-on-life Action Groups
-                  </span>
+                <div className="text-xs leading-relaxed text-cru-charcoal dark:text-cru-ink">
+                  <strong className="font-semibold">Build:</strong> Deepening
+                  faith and character through Action Groups
                 </div>
-                <div className="flex items-center gap-2.5 text-xs text-cru-charcoal dark:text-cru-ink">
-                  <span className="size-2 rounded-full bg-cru-gold" />
-                  <span>
-                    <strong>Send:</strong> Growing as a campus multiplier
-                  </span>
+                <div className="text-xs leading-relaxed text-cru-charcoal dark:text-cru-ink">
+                  <strong className="font-semibold">Send:</strong> Equipping
+                  disciples to mentor and multiply others
                 </div>
               </div>
             </div>
