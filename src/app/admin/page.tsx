@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeft, ShieldCheck } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { DraftingContainer, DraftingDivider } from "@/components/layout/DraftingGrid";
 import {
@@ -123,30 +123,26 @@ export default async function AdminPage() {
   const givingChannels = (channelsRes.data as GivingChannel[]) ?? [];
 
   return (
-    <main className="min-h-screen bg-white pt-32 pb-20">
-      <DraftingContainer className="px-6 py-10 md:px-12">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <Link
-              href="/dashboard"
-              className="mb-3 inline-flex items-center gap-1.5 text-xs font-medium text-cru-muted transition-colors hover:text-cru-charcoal"
-            >
-              <ArrowLeft className="size-3.5" />
-              <span>Back to Member Dashboard</span>
-            </Link>
-            <div className="flex items-center gap-2.5">
-              <span className="grid size-9 place-items-center rounded-full bg-cru-gold text-cru-charcoal">
-                <ShieldCheck className="size-4" />
-              </span>
-              <h1 className="text-2xl font-semibold tracking-tight text-cru-charcoal md:text-3xl">
-                Campus Leadership &amp; Admin Console
-              </h1>
-            </div>
-            <p className="mt-2 text-sm text-cru-muted">
-              Confirm new disciplers, pair students with spiritual moms &amp;
-              dads, triage incoming inquiries, and publish ministry projects.
-            </p>
+    <main className="min-h-screen bg-white pt-32 pb-20 dark:bg-cru-night">
+      <DraftingContainer className="px-6 py-8 md:px-12">
+        <div className="max-w-2xl">
+          <Link
+            href="/dashboard"
+            className="mb-3 inline-flex min-h-[44px] items-center gap-1.5 rounded-lg pr-2 text-xs font-medium text-cru-muted transition-colors hover:text-cru-charcoal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cru-gold dark:text-cru-ink-muted dark:hover:text-cru-ink"
+          >
+            <ArrowLeft aria-hidden="true" className="size-3.5" />
+            <span>Back to Member Dashboard</span>
+          </Link>
+          <div className="font-mono text-[11px] uppercase tracking-widest text-cru-gold-text dark:text-cru-gold">
+            Cru-VSU · Admin Console
           </div>
+          <h1 className="mt-1.5 text-2xl font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink md:text-3xl">
+            Campus Leadership &amp; Stewardship
+          </h1>
+          <p className="mt-2 text-sm leading-relaxed text-cru-muted dark:text-cru-ink-muted">
+            Review discipler applications, pair students with spiritual parents,
+            triage join inquiries, and verify Cru Eastern Visayas gifts.
+          </p>
         </div>
 
         <DraftingDivider className="my-8" />
