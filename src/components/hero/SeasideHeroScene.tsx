@@ -198,9 +198,9 @@ export function SeasideHeroScene() {
   const isLight = theme === "light";
 
   return (
-    <div className="relative z-[5] mt-4 w-full overflow-hidden select-none lg:absolute lg:inset-y-0 lg:right-0 lg:mt-0 lg:w-[66%] lg:[mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_100%)] lg:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_100%)]">
+    <div className="relative z-[5] mt-4 w-full overflow-hidden select-none lg:absolute lg:bottom-0 lg:right-0 lg:mt-0 lg:h-[80%] lg:w-[58%] lg:[mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_100%)] lg:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_100%)]">
       {/* Strictly 4:3 inner stage anchored right-bottom so overlays never drift */}
-      <div className="relative aspect-[4/3] w-full lg:absolute lg:bottom-0 lg:right-0 lg:h-[max(100%,calc(66vw*0.75))] lg:w-auto">
+      <div className="relative aspect-[4/3] w-full lg:absolute lg:bottom-0 lg:right-0 lg:h-[max(100%,calc(58vw*0.75))] lg:w-auto">
         {/* Daylight ink-and-watercolor seaside painting */}
         <Image
           src="/images/hero-seaside.jpg"
@@ -353,6 +353,12 @@ export function SeasideHeroScene() {
           ))}
         </div>
       </div>
+
+      {/* Soft top fade so the upper canopy & night sky melt smoothly into the hero canvas */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-white via-white/55 to-transparent dark:from-cru-night dark:via-cru-night/60 sm:h-24"
+      />
 
       {/* Soft bottom feather so dark-mode shore blends into the section divider */}
       <div
