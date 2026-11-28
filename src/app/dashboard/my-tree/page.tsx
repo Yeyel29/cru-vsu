@@ -33,7 +33,9 @@ export default async function MyTreePage() {
 
   const { data: allProfiles } = await supabase
     .from("profiles")
-    .select("*")
+    .select(
+      "id, full_name, avatar_url, college_program, testimony, favorite_verse, role, discipler_id, generation_depth, is_root_jesus, created_at, updated_at"
+    )
     .order("generation_depth", { ascending: true });
 
   const subtreeData = extractPersonalSubtree(
@@ -44,28 +46,28 @@ export default async function MyTreePage() {
   const downlineCount = Math.max(0, subtreeData.nodes.length - 1);
 
   return (
-    <main className="min-h-screen bg-white pt-32 pb-20">
+    <main className="min-h-screen bg-white pt-32 pb-20 dark:bg-cru-night">
       <DraftingContainer className="px-6 py-8 md:px-10">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <div>
             <Link
               href="/dashboard"
-              className="mb-3 inline-flex items-center gap-1.5 text-xs font-medium text-cru-muted transition-colors hover:text-cru-charcoal"
+              className="mb-3 inline-flex items-center gap-1.5 text-xs font-medium text-cru-muted transition-colors hover:text-cru-charcoal dark:text-cru-ink-muted dark:hover:text-cru-ink"
             >
               <ArrowLeft className="size-3.5" />
               <span>Back to Member Dashboard</span>
             </Link>
-            <h1 className="text-2xl font-semibold tracking-tight text-cru-charcoal md:text-3xl">
+            <h1 className="text-2xl font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink md:text-3xl">
               My Spiritual Family Tree Web
             </h1>
-            <p className="mt-1 text-sm text-cru-muted">
+            <p className="mt-1 text-sm text-cru-muted dark:text-cru-ink-muted">
               Manage your personal discipleship branch—every disciple added here
               syncs directly into the main Cru-VSU tree rooted in Jesus.
             </p>
           </div>
 
-          <div className="inline-flex items-center gap-2.5 rounded-full border border-neutral-900/[0.08] bg-cru-surface px-4 py-2 font-mono text-xs text-cru-charcoal">
-            <GitBranch className="size-3.5 text-cru-gold-hover" />
+          <div className="inline-flex items-center gap-2.5 rounded-full border border-neutral-900/[0.08] bg-cru-surface px-4 py-2 font-mono text-xs text-cru-charcoal dark:border-white/10 dark:bg-cru-night-surface dark:text-cru-ink">
+            <GitBranch className="size-3.5 text-cru-gold-hover dark:text-cru-gold" />
             <span>{downlineCount} disciples in your downline</span>
           </div>
         </div>

@@ -5,10 +5,10 @@ import { UserPlus, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { submitJoinInquiry } from "@/app/actions/join";
 
 const QUICK_INTERESTS = [
-  "Looking for an Action Group (Bible study)",
-  "Want a spiritual mom / dad (discipler)",
-  "Curious about faith & Jesus",
-  "Interested in volunteering for campus outreach",
+  "Join an Action Group (Bible Study)",
+  "Connect with a Discipler",
+  "Explore Faith in Jesus Christ",
+  "Serve in Campus Outreach",
 ];
 
 /**
@@ -96,7 +96,7 @@ export function JoinCruForm() {
             name="fullName"
             type="text"
             required
-            placeholder="e.g., Juan Dela Cruz"
+            placeholder="Your full name"
             className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink dark:placeholder:text-cru-ink-muted/70"
           />
         </div>
@@ -113,7 +113,7 @@ export function JoinCruForm() {
             name="email"
             type="email"
             required
-            placeholder="juan@vsu.edu.ph"
+            placeholder="you@vsu.edu.ph"
             className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink dark:placeholder:text-cru-ink-muted/70"
           />
         </div>
@@ -131,7 +131,7 @@ export function JoinCruForm() {
             id="join-collegeCourseYear"
             name="collegeCourseYear"
             type="text"
-            placeholder="e.g., BS Agriculture · 2nd Year"
+            placeholder="e.g., BS Agriculture, 2nd Year"
             className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink dark:placeholder:text-cru-ink-muted/70"
           />
         </div>
@@ -148,7 +148,7 @@ export function JoinCruForm() {
             id="join-phone"
             name="phone"
             type="text"
-            placeholder="0917 000 0000 or m.me/username"
+            placeholder="Mobile number or Messenger link"
             className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink dark:placeholder:text-cru-ink-muted/70"
           />
         </div>
@@ -182,7 +182,7 @@ export function JoinCruForm() {
           rows={3}
           value={interest}
           onChange={(e) => setInterest(e.target.value)}
-          placeholder="Tell us what you're looking for—a Bible study, a spiritual mentor, or questions about faith..."
+          placeholder="Share how we can pray for you or help you get connected (Action Group, mentorship, or questions about faith)..."
           className="w-full rounded-2xl border border-neutral-900/[0.09] bg-white p-4 text-sm text-cru-charcoal placeholder:text-cru-muted/60 focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink dark:placeholder:text-cru-ink-muted/70"
         />
       </div>
@@ -199,7 +199,7 @@ export function JoinCruForm() {
             <UserPlus className="size-4" />
           )}
         </span>
-        <span>{isPending ? "Sending Request..." : "Ask to Join Cru"}</span>
+        <span>{isPending ? "Sending Request..." : "Connect with Cru VSU"}</span>
       </button>
     </form>
   );

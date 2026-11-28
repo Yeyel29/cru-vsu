@@ -14,10 +14,10 @@ export default async function TreePage() {
         <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
           <div>
             <div className="font-mono text-[11px] uppercase tracking-widest text-cru-gold-text dark:text-cru-gold">
-              Cru-VSU · Spiritual Family Tree
+              Cru VSU · Spiritual Multiplication
             </div>
             <h1 className="mt-1 text-2xl font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink md:text-3xl">
-              Discipleship Network Universe
+              Discipleship Family Tree
             </h1>
           </div>
 

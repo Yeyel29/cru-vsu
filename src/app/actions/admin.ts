@@ -37,7 +37,7 @@ async function verifyAdmin() {
 
 export async function reviewDisciplerApplication(
   applicationId: string,
-  applicantId: string,
+  _applicantId: string,
   decision: "approved" | "rejected"
 ): Promise<AdminActionResult> {
   const { supabase, adminProfile } = await verifyAdmin();
@@ -45,34 +45,16 @@ export async function reviewDisciplerApplication(
     return { success: false, message: "Unauthorized: Admin access required." };
   }
 
-  const { error: appError } = await supabase
-    .from("discipler_applications")
-    .update({
-      status: decision,
-      reviewed_by: adminProfile.id,
-      reviewed_at: new Date().toISOString(),
-    })
-    .eq("id", applicationId);
+  const { error } = await supabase.rpc("review_discipler_application", {
+    p_application_id: applicationId,
+    p_decision: decision,
+  });
 
-  if (appError) {
-    return { success: false, message: "Failed to update application status." };
-  }
-
-  if (decision === "approved") {
-    const { error: roleError } = await supabase
-      .from("profiles")
-      .update({
-        role: "discipler",
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", applicantId);
-
-    if (roleError) {
-      return {
-        success: false,
-        message: "Application approved, but failed to promote user role.",
-      };
-    }
+  if (error) {
+    return {
+      success: false,
+      message: error.message || "Failed to review application.",
+    };
   }
 
   revalidatePath("/admin");
@@ -101,36 +83,18 @@ export async function pairMentorshipRequest(
     return { success: false, message: "Please select a discipler to assign." };
   }
 
-  const { data: discipler } = await supabase
-    .from("profiles")
-    .select("id, generation_depth")
-    .eq("id", disciplerId)
-    .single();
+  const { error } = await supabase.rpc("pair_mentorship_request", {
+    p_request_id: requestId,
+    p_requester_id: requesterId,
+    p_discipler_id: disciplerId,
+  });
 
-  if (!discipler) {
-    return { success: false, message: "Selected discipler was not found." };
+  if (error) {
+    return {
+      success: false,
+      message: error.message || "Failed to link disciple to tree.",
+    };
   }
-
-  const { error: profileError } = await supabase
-    .from("profiles")
-    .update({
-      discipler_id: discipler.id,
-      generation_depth: (discipler.generation_depth ?? 1) + 1,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", requesterId);
-
-  if (profileError) {
-    return { success: false, message: "Failed to link disciple to tree." };
-  }
-
-  await supabase
-    .from("mentorship_requests")
-    .update({
-      status: "paired",
-      assigned_discipler_id: discipler.id,
-    })
-    .eq("id", requestId);
 
   revalidatePath("/admin");
   revalidatePath("/dashboard");
@@ -144,8 +108,7 @@ export async function pairMentorshipRequest(
 
 export async function updateJoinInquiryStatus(
   inquiryId: string,
-  status: InquiryStatus,
-  assignedDisciplerId?: string
+  status: InquiryStatus
 ): Promise<AdminActionResult> {
   const { supabase, adminProfile } = await verifyAdmin();
   if (!supabase || !adminProfile) {
@@ -154,12 +117,7 @@ export async function updateJoinInquiryStatus(
 
   const { error } = await supabase
     .from("join_inquiries")
-    .update({
-      status,
-      ...(assignedDisciplerId !== undefined
-        ? { assigned_discipler_id: assignedDisciplerId || null }
-        : {}),
-    })
+    .update({ status })
     .eq("id", inquiryId);
 
   if (error) {
@@ -382,6 +340,12 @@ export async function deleteGivingChannel(
     return { success: false, message: "Unauthorized: Admin access required." };
   }
 
+  const { data: existingChannel } = await supabase
+    .from("giving_channels")
+    .select("qr_image_url")
+    .eq("id", channelId)
+    .maybeSingle();
+
   const { error } = await supabase
     .from("giving_channels")
     .delete()
@@ -389,6 +353,18 @@ export async function deleteGivingChannel(
 
   if (error) {
     return { success: false, message: "Failed to remove giving channel." };
+  }
+
+  const qrUrl = existingChannel?.qr_image_url;
+  if (qrUrl) {
+    const marker = "/storage/v1/object/public/giving-qr-codes/";
+    const idx = qrUrl.indexOf(marker);
+    if (idx !== -1) {
+      const storagePath = decodeURIComponent(qrUrl.slice(idx + marker.length));
+      if (storagePath) {
+        await supabase.storage.from("giving-qr-codes").remove([storagePath]);
+      }
+    }
   }
 
   revalidatePath("/admin");

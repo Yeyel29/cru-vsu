@@ -9,7 +9,8 @@ import {
   getAncestryPath,
   getGenerationColor,
 } from "@/lib/graph/transform";
-import { cn } from "@/lib/utils";
+import { findNodeAtScreenPoint } from "@/lib/graph/hitTest";
+import { cn, getInitials } from "@/lib/utils";
 import { useTheme } from "@/components/theme/useTheme";
 import type { DiscipleshipGraphData, GraphNode } from "@/types/database";
 
@@ -30,12 +31,6 @@ interface DiscipleshipGraphCanvasProps {
   fullScreenHref?: string;
 }
 
-function getInitials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
-}
-
 /**
  * Obsidian-style interactive force-directed graph for the Cru-VSU Spiritual Family Tree.
  */
@@ -50,7 +45,6 @@ export function DiscipleshipGraphCanvas({
   const fgRef = useRef<ForceGraphMethods | undefined>(undefined);
 
   const [dimensions, setDimensions] = useState({ width: 800, height: 520 });
-  const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [maxDepthFilter, setMaxDepthFilter] = useState<number | null>(null);
   // The canvas follows the site theme. The sun/moon button overrides it until the site theme changes.
@@ -63,6 +57,42 @@ export function DiscipleshipGraphCanvas({
     canvasOverride && canvasOverride.theme === theme
       ? canvasOverride.value
       : theme === "dark";
+
+  const hoveredNodeIdRef = useRef<string | null>(null);
+  const selectedNodeIdRef = useRef<string | null>(selectedNode?.id ?? null);
+  const darkCanvasRef = useRef(darkCanvas);
+  const hasInitialFitRef = useRef(false);
+  const onSelectNodeRef = useRef(onSelectNode);
+  const dragRef = useRef<{
+    node: GraphNode;
+    pointerId: number;
+    startX: number;
+    startY: number;
+    dragged: boolean;
+    lastReheat: number;
+  } | null>(null);
+
+  useEffect(() => {
+    selectedNodeIdRef.current = selectedNode?.id ?? null;
+  }, [selectedNode?.id]);
+
+  useEffect(() => {
+    darkCanvasRef.current = darkCanvas;
+  }, [darkCanvas]);
+
+  useEffect(() => {
+    onSelectNodeRef.current = onSelectNode;
+  }, [onSelectNode]);
+
+  // Remember which nodes were initially pinned at (0, 0) (Jesus in main tree, or discipler in My Tree)
+  const initialPinnedIdsRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    initialPinnedIdsRef.current = new Set(
+      data.nodes
+        .filter((n) => n.fx !== undefined && n.fy !== undefined)
+        .map((n) => n.id)
+    );
+  }, [data]);
 
   // Measure container cleanly for responsive canvas
   useEffect(() => {
@@ -97,6 +127,31 @@ export function DiscipleshipGraphCanvas({
     return { nodes: validNodes, links: validLinks };
   }, [data, maxDepthFilter]);
 
+  const filteredNodesRef = useRef(filteredData.nodes);
+  useEffect(() => {
+    filteredNodesRef.current = filteredData.nodes;
+    hasInitialFitRef.current = false;
+  }, [filteredData]);
+
+  // Cache ancestry path lookup by focusNodeId + nodes array so frame draws stay O(1)
+  const activePathCacheRef = useRef<{
+    focusId: string | null;
+    nodes: GraphNode[];
+    path: { nodeIds: Set<string>; linkKeys: Set<string> } | null;
+  }>({ focusId: null, nodes: [], path: null });
+
+  const getActivePath = useCallback(() => {
+    const focusId = hoveredNodeIdRef.current || selectedNodeIdRef.current;
+    const nodes = filteredNodesRef.current;
+    const cache = activePathCacheRef.current;
+    if (cache.focusId === focusId && cache.nodes === nodes) {
+      return cache.path;
+    }
+    const path = focusId ? getAncestryPath(focusId, nodes) : null;
+    activePathCacheRef.current = { focusId, nodes, path };
+    return path;
+  }, []);
+
   // Search matches
   const searchResults = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -110,13 +165,6 @@ export function DiscipleshipGraphCanvas({
       .slice(0, 6);
   }, [searchQuery, filteredData.nodes]);
 
-  // Highlight ancestry chain back to Jesus on hover or selection
-  const focusNodeId = hoveredNodeId || selectedNode?.id || null;
-  const activePath = useMemo(() => {
-    if (!focusNodeId) return null;
-    return getAncestryPath(focusNodeId, filteredData.nodes);
-  }, [focusNodeId, filteredData.nodes]);
-
   const focusCameraOnNode = useCallback((node: GraphNode) => {
     if (fgRef.current && node.x !== undefined && node.y !== undefined) {
       fgRef.current.centerAt(node.x, node.y, 600);
@@ -124,11 +172,22 @@ export function DiscipleshipGraphCanvas({
     }
   }, []);
 
-  const handleResetCamera = () => {
+  const handleResetCamera = useCallback(() => {
+    for (const node of filteredNodesRef.current) {
+      if (initialPinnedIdsRef.current.has(node.id)) {
+        node.fx = 0;
+        node.fy = 0;
+      } else {
+        node.fx = undefined;
+        node.fy = undefined;
+      }
+    }
+    hasInitialFitRef.current = false;
+    fgRef.current?.d3ReheatSimulation();
     fgRef.current?.zoomToFit(500, 60);
-  };
+  }, []);
 
-  // Custom HTML5 Canvas renderer per node
+  // Custom HTML5 Canvas renderer per node (reads refs so hover never triggers React re-renders)
   const drawNode = useCallback(
     (
       nodeObj: object,
@@ -139,11 +198,13 @@ export function DiscipleshipGraphCanvas({
       const x = node.x ?? 0;
       const y = node.y ?? 0;
 
+      const activePath = getActivePath();
+      const isDark = darkCanvasRef.current;
       const isDimmed =
         activePath !== null && !activePath.nodeIds.has(node.id);
       const isHighlighted =
         activePath !== null && activePath.nodeIds.has(node.id);
-      const isSelected = selectedNode?.id === node.id;
+      const isSelected = selectedNodeIdRef.current === node.id;
 
       ctx.save();
       ctx.globalAlpha = isDimmed ? 0.2 : 1;
@@ -169,7 +230,7 @@ export function DiscipleshipGraphCanvas({
 
       // Clean border ring
       ctx.lineWidth = node.isRootJesus ? 2 / globalScale : 1.5 / globalScale;
-      ctx.strokeStyle = darkCanvas ? "#171717" : "#FFFFFF";
+      ctx.strokeStyle = isDark ? "#171717" : "#FFFFFF";
       ctx.stroke();
 
       // Inner symbol / initials
@@ -190,14 +251,195 @@ export function DiscipleshipGraphCanvas({
         ctx.font = `${node.isRootJesus ? "700" : "500"} ${labelFontSize}px Inter, system-ui, sans-serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
-        ctx.fillStyle = darkCanvas ? "#F5F5F5" : "#171717";
+        ctx.fillStyle = isDark ? "#F5F5F5" : "#171717";
         ctx.fillText(node.name, x, y + radius + 3 / globalScale);
       }
 
       ctx.restore();
     },
-    [activePath, selectedNode?.id, darkCanvas]
+    [getActivePath]
   );
+
+  const findNodeAtClientPoint = useCallback(
+    (clientX: number, clientY: number): GraphNode | null => {
+      const container = containerRef.current;
+      const fg = fgRef.current;
+      if (!container || !fg) return null;
+      const rect = container.getBoundingClientRect();
+      const pointerX = clientX - rect.left;
+      const pointerY = clientY - rect.top;
+      const currentZoom = fg.zoom() ?? 1;
+      return findNodeAtScreenPoint(
+        filteredNodesRef.current,
+        pointerX,
+        pointerY,
+        (x, y) => fg.graph2ScreenCoords(x, y),
+        currentZoom
+      );
+    },
+    []
+  );
+
+  const shouldAllowCanvasPan = useCallback(
+    (ev: MouseEvent) => {
+      const touch = (ev as unknown as TouchEvent).touches?.[0];
+      const clientX = touch ? touch.clientX : ev.clientX;
+      const clientY = touch ? touch.clientY : ev.clientY;
+      if (typeof clientX !== "number" || typeof clientY !== "number") {
+        return true;
+      }
+      return findNodeAtClientPoint(clientX, clientY) === null;
+    },
+    [findNodeAtClientPoint]
+  );
+
+  const handleContainerPointerDown = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      const hitNode = findNodeAtClientPoint(event.clientX, event.clientY);
+      if (!hitNode) return;
+
+      event.currentTarget.setPointerCapture(event.pointerId);
+      dragRef.current = {
+        node: hitNode,
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        dragged: false,
+        lastReheat: 0,
+      };
+      event.currentTarget.style.cursor = "grabbing";
+    },
+    [findNodeAtClientPoint]
+  );
+
+  const handleContainerPointerMove = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      const drag = dragRef.current;
+      if (drag && drag.pointerId === event.pointerId) {
+        const moved = Math.hypot(
+          event.clientX - drag.startX,
+          event.clientY - drag.startY
+        );
+        if (!drag.dragged && moved > 5) {
+          drag.dragged = true;
+        }
+        if (drag.dragged) {
+          const container = containerRef.current;
+          const fg = fgRef.current;
+          if (container && fg) {
+            const rect = container.getBoundingClientRect();
+            const { x: gx, y: gy } = fg.screen2GraphCoords(
+              event.clientX - rect.left,
+              event.clientY - rect.top
+            );
+            drag.node.fx = gx;
+            drag.node.fy = gy;
+            drag.node.x = gx;
+            drag.node.y = gy;
+            const now = performance.now();
+            if (now - drag.lastReheat > 120) {
+              fg.d3ReheatSimulation();
+              drag.lastReheat = now;
+            }
+          }
+        }
+        return;
+      }
+
+      const hit = findNodeAtClientPoint(event.clientX, event.clientY);
+      hoveredNodeIdRef.current = hit ? hit.id : null;
+      event.currentTarget.style.cursor = hit ? "pointer" : "grab";
+    },
+    [findNodeAtClientPoint]
+  );
+
+  const finishNodeDrag = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>, treatAsClickIfStill: boolean) => {
+      const drag = dragRef.current;
+      if (!drag || drag.pointerId !== event.pointerId) return;
+      dragRef.current = null;
+
+      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      }
+
+      if (!drag.dragged && treatAsClickIfStill) {
+        onSelectNodeRef.current(drag.node);
+        focusCameraOnNode(drag.node);
+      } else if (drag.dragged) {
+        drag.node.fx = drag.node.x;
+        drag.node.fy = drag.node.y;
+        fgRef.current?.d3ReheatSimulation();
+      }
+
+      const hit = findNodeAtClientPoint(event.clientX, event.clientY);
+      hoveredNodeIdRef.current = hit ? hit.id : null;
+      event.currentTarget.style.cursor = hit ? "pointer" : "grab";
+    },
+    [findNodeAtClientPoint, focusCameraOnNode]
+  );
+
+  const handleContainerPointerUp = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      finishNodeDrag(event, true);
+    },
+    [finishNodeDrag]
+  );
+
+  const handleContainerPointerCancel = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      finishNodeDrag(event, false);
+    },
+    [finishNodeDrag]
+  );
+
+  const handleContainerPointerLeave = useCallback(() => {
+    if (!dragRef.current) {
+      hoveredNodeIdRef.current = null;
+    }
+  }, []);
+
+  const getLinkColor = useCallback(
+    (linkObj: object) => {
+      const link = linkObj as { source: GraphNode | string; target: GraphNode | string };
+      const s = typeof link.source === "string" ? link.source : link.source.id;
+      const t = typeof link.target === "string" ? link.target : link.target.id;
+      const activePath = getActivePath();
+      const isDark = darkCanvasRef.current;
+      const isHighlighted = activePath?.linkKeys.has(`${s}->${t}`);
+
+      if (activePath && !isHighlighted) {
+        return isDark ? "rgba(255,255,255,0.06)" : "rgba(23,23,23,0.06)";
+      }
+      return isHighlighted
+        ? "#FDB913"
+        : isDark
+        ? "rgba(253,185,19,0.35)"
+        : "rgba(23,23,23,0.18)";
+    },
+    [getActivePath]
+  );
+
+  const getLinkWidth = useCallback(
+    (linkObj: object) => {
+      const link = linkObj as { source: GraphNode | string; target: GraphNode | string };
+      const s = typeof link.source === "string" ? link.source : link.source.id;
+      const t = typeof link.target === "string" ? link.target : link.target.id;
+      const activePath = getActivePath();
+      return activePath?.linkKeys.has(`${s}->${t}`) ? 2.4 : 1.2;
+    },
+    [getActivePath]
+  );
+
+  const getParticleColor = useCallback(() => "#FDB913", []);
+
+  const handleEngineStop = useCallback(() => {
+    if (!hasInitialFitRef.current) {
+      hasInitialFitRef.current = true;
+      fgRef.current?.zoomToFit(400, 60);
+    }
+  }, []);
 
   return (
     <div
@@ -226,6 +468,7 @@ export function DiscipleshipGraphCanvas({
             <Search className="size-3.5 shrink-0 text-cru-muted dark:text-cru-ink-muted" aria-hidden="true" />
             <input
               type="text"
+              aria-label="Search person or degree program"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search person or course..."
@@ -289,22 +532,28 @@ export function DiscipleshipGraphCanvas({
           <button
             type="button"
             onClick={handleResetCamera}
+            aria-label="Reset camera and layout"
             title="Reset camera / Zoom to fit"
-            className="glass-nav grid size-9 place-items-center rounded-full text-cru-charcoal transition-transform hover:scale-105 dark:text-cru-ink"
+            className="glass-nav grid size-9 place-items-center rounded-full text-cru-charcoal transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cru-gold dark:text-cru-ink"
           >
-            <RotateCcw className="size-3.5" />
+            <RotateCcw aria-hidden="true" className="size-3.5" />
           </button>
 
           <button
             type="button"
             onClick={() => setCanvasOverride({ value: !darkCanvas, theme })}
-            title="Toggle Obsidian Dark / Light Canvas"
-            className="glass-nav grid size-9 place-items-center rounded-full text-cru-charcoal transition-transform hover:scale-105 dark:text-cru-ink"
+            aria-label={
+              darkCanvas
+                ? "Switch graph canvas to light mode"
+                : "Switch graph canvas to dark mode"
+            }
+            title="Toggle Dark / Light Canvas"
+            className="glass-nav grid size-9 place-items-center rounded-full text-cru-charcoal transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cru-gold dark:text-cru-ink"
           >
             {darkCanvas ? (
-              <Sun className="size-3.5 text-cru-gold-hover" />
+              <Sun aria-hidden="true" className="size-3.5 text-cru-gold-hover" />
             ) : (
-              <Moon className="size-3.5" />
+              <Moon aria-hidden="true" className="size-3.5" />
             )}
           </button>
 
@@ -321,7 +570,15 @@ export function DiscipleshipGraphCanvas({
       </div>
 
       {/* Force Graph Canvas */}
-      <div ref={containerRef} className="relative flex-1 cursor-grab active:cursor-grabbing">
+      <div
+        ref={containerRef}
+        onPointerDown={handleContainerPointerDown}
+        onPointerMove={handleContainerPointerMove}
+        onPointerUp={handleContainerPointerUp}
+        onPointerCancel={handleContainerPointerCancel}
+        onPointerLeave={handleContainerPointerLeave}
+        className="relative flex-1 touch-none cursor-grab active:cursor-grabbing"
+      >
         <ForceGraph2D
           ref={fgRef}
           width={dimensions.width}
@@ -329,50 +586,17 @@ export function DiscipleshipGraphCanvas({
           graphData={filteredData}
           backgroundColor="rgba(0,0,0,0)"
           nodeCanvasObject={drawNode}
-          nodePointerAreaPaint={(nodeObj, color, ctx) => {
-            const node = nodeObj as GraphNode;
-            ctx.fillStyle = color;
-            ctx.beginPath();
-            ctx.arc(node.x ?? 0, node.y ?? 0, 14, 0, 2 * Math.PI);
-            ctx.fill();
-          }}
-          onNodeClick={(nodeObj) => {
-            const node = nodeObj as GraphNode;
-            onSelectNode(node);
-            focusCameraOnNode(node);
-          }}
-          onNodeHover={(nodeObj) => {
-            setHoveredNodeId(nodeObj ? (nodeObj as GraphNode).id : null);
-          }}
-          linkColor={(linkObj) => {
-            const link = linkObj as { source: GraphNode | string; target: GraphNode | string };
-            const s = typeof link.source === "string" ? link.source : link.source.id;
-            const t = typeof link.target === "string" ? link.target : link.target.id;
-            const isHighlighted = activePath?.linkKeys.has(`${s}->${t}`);
-
-            if (activePath && !isHighlighted) {
-              return darkCanvas
-                ? "rgba(255,255,255,0.06)"
-                : "rgba(23,23,23,0.06)";
-            }
-            return isHighlighted
-              ? "#FDB913"
-              : darkCanvas
-              ? "rgba(253,185,19,0.35)"
-              : "rgba(23,23,23,0.18)";
-          }}
-          linkWidth={(linkObj) => {
-            const link = linkObj as { source: GraphNode | string; target: GraphNode | string };
-            const s = typeof link.source === "string" ? link.source : link.source.id;
-            const t = typeof link.target === "string" ? link.target : link.target.id;
-            return activePath?.linkKeys.has(`${s}->${t}`) ? 2.4 : 1.2;
-          }}
+          enablePointerInteraction={false}
+          enableNodeDrag={false}
+          enablePanInteraction={shouldAllowCanvasPan}
+          linkColor={getLinkColor}
+          linkWidth={getLinkWidth}
           linkDirectionalParticles={2}
           linkDirectionalParticleWidth={2.2}
           linkDirectionalParticleSpeed={0.004}
-          linkDirectionalParticleColor={() => "#FDB913"}
+          linkDirectionalParticleColor={getParticleColor}
           cooldownTicks={90}
-          onEngineStop={() => fgRef.current?.zoomToFit(400, 60)}
+          onEngineStop={handleEngineStop}
         />
       </div>
 
@@ -381,7 +605,7 @@ export function DiscipleshipGraphCanvas({
         <div className="flex flex-wrap items-center gap-4 text-[11px] font-medium text-cru-charcoal dark:text-cru-ink">
           <span className="inline-flex items-center gap-1.5">
             <span className="size-2.5 rounded-full bg-[#FDB913]" />
-            Jesus (Root)
+            Jesus Christ (Center)
           </span>
           <span className="inline-flex items-center gap-1.5">
             <span className="size-2.5 rounded-full bg-[#D97706]" />
@@ -398,7 +622,7 @@ export function DiscipleshipGraphCanvas({
         </div>
 
         <span className="font-mono text-[10px] text-cru-muted dark:text-cru-ink-muted">
-          Click any node to view spiritual lineage · Scroll to zoom · Drag to pan
+          Click any node to view lineage · Drag any node to arrange · Scroll to zoom
         </span>
       </div>
     </div>

@@ -42,24 +42,24 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white pt-32 pb-20">
+    <main className="min-h-screen bg-white pt-32 pb-20 dark:bg-cru-night">
       <DraftingContainer className="flex min-h-[70vh] items-center justify-center px-6 py-12">
-        <div className="w-full max-w-md rounded-[28px] border border-neutral-900/[0.08] bg-cru-surface p-8 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.06)]">
+        <div className="w-full max-w-md rounded-[28px] border border-neutral-900/[0.08] bg-cru-surface p-8 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.06)] dark:border-white/10 dark:bg-cru-night-surface">
           <div className="mb-6">
-            <div className="mb-2 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-cru-gold-hover">
+            <div className="mb-2 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-cru-gold-text dark:text-cru-gold">
               <span className="size-2 rounded-full bg-cru-gold" />
               Cru-VSU · Member Portal
             </div>
-            <h1 className="text-2xl font-semibold tracking-tight text-cru-charcoal">
+            <h1 className="text-2xl font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink">
               Welcome Back
             </h1>
-            <p className="mt-1.5 text-sm text-cru-muted">
+            <p className="mt-1.5 text-sm text-cru-muted dark:text-cru-ink-muted">
               Sign in to access your discipleship dashboard and family tree web.
             </p>
           </div>
 
           {error && (
-            <div className="mb-5 flex items-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-700">
+            <div className="mb-5 flex items-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-700 dark:border-red-400/30 dark:bg-red-500/10 dark:text-red-300">
               <AlertCircle className="size-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -69,7 +69,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="login-email"
-                className="mb-1.5 block text-xs font-medium text-cru-charcoal"
+                className="mb-1.5 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
               >
                 Email Address
               </label>
@@ -80,14 +80,14 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@vsu.edu.ph"
-                className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none"
+                className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink"
               />
             </div>
 
             <div>
               <label
                 htmlFor="login-password"
-                className="mb-1.5 block text-xs font-medium text-cru-charcoal"
+                className="mb-1.5 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
               >
                 Password
               </label>
@@ -98,7 +98,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none"
+                className="h-11 w-full rounded-2xl border border-neutral-900/[0.09] bg-white px-4 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink"
               />
             </div>
 
@@ -116,11 +116,11 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-xs text-cru-muted">
+          <p className="mt-6 text-center text-xs text-cru-muted dark:text-cru-ink-muted">
             Already part of Cru VSU without an account?{" "}
             <Link
               href="/auth/register"
-              className="font-semibold text-cru-charcoal underline decoration-cru-gold underline-offset-4 hover:text-cru-gold-hover"
+              className="font-semibold text-cru-charcoal underline decoration-cru-gold underline-offset-4 hover:text-cru-gold-hover dark:text-cru-ink dark:hover:text-cru-gold"
             >
               Create Member Account
             </Link>

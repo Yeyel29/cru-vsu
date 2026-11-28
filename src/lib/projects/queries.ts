@@ -4,13 +4,13 @@ import type { MinistryProject } from "@/types/database";
 const FALLBACK_PROJECTS: MinistryProject[] = [
   {
     id: "proj-1",
-    title: "College Life Weekly Fellowship",
+    title: "College Life Meeting",
     slug: "college-life-fellowship",
     category: "Fellowship",
     summary:
-      "Our weekly large-group gathering for worship, biblical teaching, and authentic campus community.",
+      "Weekly large-group gathering for worship, biblical teaching, and Christ-centered campus fellowship.",
     description:
-      "Join students from every college at VSU for an energizing evening of worship, relevant messages from Scripture, games, and fellowship. A welcoming space whether you are exploring faith or looking for a Christian community on campus.",
+      "Join students from across Visayas State University for an evening of worship, biblical teaching, prayer, and fellowship. A welcoming space whether you are exploring faith in Jesus Christ or seeking Christian community on campus.",
     cover_image_url: null,
     gallery_urls: [],
     schedule: "Thursdays, 6:00 PM @ Student Union Building",
@@ -24,9 +24,9 @@ const FALLBACK_PROJECTS: MinistryProject[] = [
     slug: "campus-action-groups",
     category: "Action Groups",
     summary:
-      "Small-group discipleship cohorts led by student moms and dads across dorms and colleges.",
+      "Small-group Bible study and discipleship cohorts led by student leaders across colleges and dorms.",
     description:
-      "Action Groups are where life-on-life discipleship happens. Meet weekly with 4-8 peers in your college or dorm to study the Bible, pray for one another, and navigate university life together.",
+      "Action Groups are where life-on-life discipleship takes place. Meet weekly with peers in your college or dormitory to study Scripture, pray together, and grow in Christlike character.",
     cover_image_url: null,
     gallery_urls: [],
     schedule: "Various schedules by College & Dormitory",
@@ -36,13 +36,13 @@ const FALLBACK_PROJECTS: MinistryProject[] = [
   },
   {
     id: "proj-3",
-    title: "Freshmen Welcome & Soularium Outreach",
+    title: "Freshmen Welcome & Aninag Outreach",
     slug: "freshmen-soularium-outreach",
     category: "Outreach",
     summary:
-      "Creative spiritual conversations across VSU campus using visual story cards and campus hospitality.",
+      "Intentional spiritual conversations across VSU using Aninag visual story cards and campus hospitality.",
     description:
-      "Every semester we set up interactive stations around the VSU Upper and Lower Campus to hear students' stories, share the hope of Jesus, and invite newcomers into community.",
+      "Every semester we set up interactive stations across the VSU Upper and Lower Campus to listen to students' stories, share the Gospel of Jesus Christ, and invite newcomers into Action Groups.",
     cover_image_url: null,
     gallery_urls: [],
     schedule: "First 3 weeks of each semester",

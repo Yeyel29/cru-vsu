@@ -60,7 +60,7 @@ export default async function AdminPage() {
         .order("created_at", { ascending: false }),
       supabase
         .from("profiles")
-        .select("*")
+        .select("id, full_name, college_program, role, generation_depth")
         .order("generation_depth", { ascending: true }),
       supabase
         .from("donations")

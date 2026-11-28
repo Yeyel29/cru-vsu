@@ -44,30 +44,30 @@ export function DisciplerWebWorkspace({
       </div>
 
       {/* Right Column: Add Disciple to My Tree Form */}
-      <div className="rounded-[24px] border border-neutral-900/[0.07] bg-cru-surface p-7">
+      <div className="rounded-[24px] border border-neutral-900/[0.07] bg-cru-surface p-7 dark:border-white/10 dark:bg-cru-night-surface">
         <div className="mb-4 flex items-center gap-2.5">
           <span className="grid size-9 place-items-center rounded-full bg-cru-gold text-cru-charcoal">
             <UserPlus className="size-4" />
           </span>
           <div>
-            <h2 className="text-base font-semibold text-cru-charcoal">
+            <h2 className="text-base font-semibold text-cru-charcoal dark:text-cru-ink">
               Add a Disciple
             </h2>
-            <p className="text-[11px] text-cru-muted">
+            <p className="text-[11px] text-cru-muted dark:text-cru-ink-muted">
               Connects directly under {disciplerName}
             </p>
           </div>
         </div>
 
         {status.type === "success" && status.message && (
-          <div className="mb-4 flex items-start gap-2 rounded-2xl border border-cru-gold/50 bg-cru-gold-soft/70 px-3.5 py-3 text-xs text-cru-charcoal">
-            <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-cru-gold-hover" />
+          <div className="mb-4 flex items-start gap-2 rounded-2xl border border-cru-gold/50 bg-cru-gold-soft/70 px-3.5 py-3 text-xs text-cru-charcoal dark:bg-cru-gold/15 dark:text-cru-ink">
+            <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-cru-gold-hover dark:text-cru-gold" />
             <span>{status.message}</span>
           </div>
         )}
 
         {status.type === "error" && status.message && (
-          <div className="mb-4 flex items-start gap-2 rounded-2xl border border-red-200 bg-red-50 px-3.5 py-3 text-xs text-red-700">
+          <div className="mb-4 flex items-start gap-2 rounded-2xl border border-red-200 bg-red-50 px-3.5 py-3 text-xs text-red-700 dark:border-red-400/30 dark:bg-red-500/10 dark:text-red-300">
             <AlertCircle className="mt-0.5 size-4 shrink-0" />
             <span>{status.message}</span>
           </div>
@@ -77,9 +77,9 @@ export function DisciplerWebWorkspace({
           <div>
             <label
               htmlFor="disciple-name"
-              className="mb-1 block text-xs font-medium text-cru-charcoal"
+              className="mb-1 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
             >
-              Disciple Full Name <span className="text-cru-gold-hover">*</span>
+              Disciple Full Name <span className="text-cru-gold-hover dark:text-cru-gold">*</span>
             </label>
             <input
               id="disciple-name"
@@ -87,14 +87,14 @@ export function DisciplerWebWorkspace({
               type="text"
               required
               placeholder="e.g., Caleb Bautista"
-              className="h-10 w-full rounded-xl border border-neutral-900/10 bg-white px-3.5 text-sm focus:border-cru-gold focus:outline-none"
+              className="h-10 w-full rounded-xl border border-neutral-900/10 bg-white px-3.5 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink"
             />
           </div>
 
           <div>
             <label
               htmlFor="disciple-program"
-              className="mb-1 block text-xs font-medium text-cru-charcoal"
+              className="mb-1 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
             >
               College / Program &amp; Year
             </label>
@@ -103,14 +103,14 @@ export function DisciplerWebWorkspace({
               name="collegeProgram"
               type="text"
               placeholder="e.g., BS Forestry, 1st Year"
-              className="h-10 w-full rounded-xl border border-neutral-900/10 bg-white px-3.5 text-sm focus:border-cru-gold focus:outline-none"
+              className="h-10 w-full rounded-xl border border-neutral-900/10 bg-white px-3.5 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink"
             />
           </div>
 
           <div>
             <label
               htmlFor="disciple-verse"
-              className="mb-1 block text-xs font-medium text-cru-charcoal"
+              className="mb-1 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
             >
               Favorite Verse
             </label>
@@ -119,14 +119,14 @@ export function DisciplerWebWorkspace({
               name="favoriteVerse"
               type="text"
               placeholder="e.g., Philippians 4:13"
-              className="h-10 w-full rounded-xl border border-neutral-900/10 bg-white px-3.5 text-sm focus:border-cru-gold focus:outline-none"
+              className="h-10 w-full rounded-xl border border-neutral-900/10 bg-white px-3.5 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink"
             />
           </div>
 
           <div>
             <label
               htmlFor="disciple-testimony"
-              className="mb-1 block text-xs font-medium text-cru-charcoal"
+              className="mb-1 block text-xs font-medium text-cru-charcoal dark:text-cru-ink"
             >
               Discipleship Note / Testimony
             </label>
@@ -135,7 +135,7 @@ export function DisciplerWebWorkspace({
               name="testimony"
               rows={3}
               placeholder="How you met or what you're studying together..."
-              className="w-full rounded-xl border border-neutral-900/10 bg-white p-3 text-sm focus:border-cru-gold focus:outline-none"
+              className="w-full rounded-xl border border-neutral-900/10 bg-white p-3 text-sm text-cru-charcoal focus:border-cru-gold focus:outline-none dark:border-white/10 dark:bg-cru-night dark:text-cru-ink"
             />
           </div>
 
