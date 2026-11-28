@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { GitBranch } from "lucide-react";
+import { JourneyIllustration } from "./JourneyIllustration";
 
 /**
  * Full-bleed 3-column animated landing hero.
@@ -79,11 +80,10 @@ export function HeroLanding() {
           </div>
         </div>
 
-        {/* Center column: reserved for Part 2 flat-2D students-on-path illustration */}
-        <div
-          aria-hidden="true"
-          className="flex min-h-[160px] items-center justify-center lg:col-span-4 lg:min-h-[260px]"
-        />
+        {/* Center column: flat 2D students walking together along a path */}
+        <div className="flex items-center justify-center lg:col-span-4">
+          <JourneyIllustration />
+        </div>
 
         {/* Right column: Cru VSU Student LinC intro */}
         <div className="lg:col-span-4 lg:pl-4">
