@@ -132,7 +132,7 @@ export function PullChainLamp() {
       ([entry]) => {
         setHiddenForHero(entry.isIntersecting);
       },
-      { threshold: 0.12 }
+      { threshold: 0.05 }
     );
 
     observer.observe(hero);

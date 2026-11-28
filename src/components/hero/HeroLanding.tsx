@@ -7,10 +7,10 @@ import { WeatherBackdrop } from "./WeatherBackdrop";
 import { SeasideHeroScene } from "./SeasideHeroScene";
 
 /**
- * Full-bleed 2-column animated landing hero.
- * Left: blur-fading "Isolation hurts, Community heals" <-> "Journey Together" + intro & CTAs.
- * Right: ink-and-watercolor seaside fellowship scene with interactive Sun/Moon theme toggle
- * and growing coastal plants.
+ * Full-bleed asymmetric 2-column animated landing hero.
+ * Left: bold editorial blur-fading "Isolation hurts, Community heals" <-> "Journey Together".
+ * Right: full-height edge-bleeding seaside sketchbook scene with dedicated day/night artwork,
+ * interactive Sun/Moon theme toggle, and growing coastal plants.
  * Uses IntersectionObserver to pause descendant CSS animations while scrolled off-screen.
  */
 export function HeroLanding() {
@@ -39,20 +39,19 @@ export function HeroLanding() {
       data-paused={paused ? "true" : "false"}
       className="relative flex min-h-[100svh] w-full flex-col justify-center overflow-hidden border-b border-neutral-900/[0.06] bg-white dark:border-white/[0.08] dark:bg-cru-night"
     >
-      {/* Ambient rain <-> sun sky backdrop */}
+      {/* Ambient sketchbook rain <-> sun sky backdrop */}
       <WeatherBackdrop />
 
-      {/* Foreground 2-column editorial layout */}
-      <div className="relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-1 items-center gap-10 px-6 pb-16 pt-28 md:px-12 lg:grid-cols-12 lg:gap-8 lg:pb-16 lg:pt-24">
-        {/* Left column: eyebrow, blur-fading headline, Cru VSU intro, CTA pills */}
-        <div className="lg:col-span-5">
+      {/* Left editorial typography column */}
+      <div className="relative z-20 mx-auto w-full max-w-[1280px] px-6 pb-4 pt-28 md:px-12 lg:py-24">
+        <div className="max-w-lg lg:max-w-[460px]">
           <p className="mb-4 text-xs font-medium tracking-wide text-cru-gold-text dark:text-cru-gold">
             Cru · Visayas State University
           </p>
 
-          <h1 className="text-3xl font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink sm:text-4xl lg:text-[44px] lg:leading-[1.1]">
+          <h1 className="text-4xl font-semibold tracking-tight text-cru-charcoal dark:text-cru-ink sm:text-5xl lg:text-[54px] lg:leading-[1.06]">
             <span className="sr-only">
-              Isolation hurts, Community heals — Journey Together
+              Isolation hurts, Community heals. Journey Together.
             </span>
             <span
               aria-hidden="true"
@@ -61,13 +60,13 @@ export function HeroLanding() {
               <span className="hero-anim hero-phrase-a col-start-1 row-start-1">
                 Isolation hurts, Community heals
               </span>
-              <span className="hero-anim hero-phrase-b col-start-1 row-start-1 motion-reduce:text-xl motion-reduce:font-medium motion-reduce:text-cru-muted dark:motion-reduce:text-cru-ink-muted">
+              <span className="hero-anim hero-phrase-b col-start-1 row-start-1 motion-reduce:text-2xl motion-reduce:font-medium motion-reduce:text-cru-muted dark:motion-reduce:text-cru-ink-muted">
                 Journey Together
               </span>
             </span>
           </h1>
 
-          <p className="mt-5 max-w-md text-sm leading-relaxed text-cru-muted dark:text-cru-ink-muted sm:text-[15px]">
+          <p className="mt-6 max-w-md text-sm leading-relaxed text-cru-muted dark:text-cru-ink-muted sm:text-[15px]">
             Here in Cru VSU Student LinC, we are privileged to walk alongside
             students as they grow in their relationship with Christ and step
             into their calling as leaders in His kingdom.
@@ -77,7 +76,7 @@ export function HeroLanding() {
             WIN · BUILD · SEND
           </p>
 
-          <div className="mt-7 flex flex-wrap items-center gap-3">
+          <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               href="/tree"
               className="inline-flex h-11 items-center gap-2.5 rounded-full bg-cru-gold p-1.5 pr-5 text-sm font-semibold text-cru-charcoal shadow-sm transition-colors hover:bg-cru-gold-hover"
@@ -90,18 +89,16 @@ export function HeroLanding() {
 
             <Link
               href="#projects"
-              className="inline-flex h-11 items-center rounded-full border border-neutral-900/[0.08] bg-white/80 px-4 text-sm font-medium text-cru-charcoal backdrop-blur-xs transition-colors hover:border-cru-gold/60 dark:border-white/10 dark:bg-cru-night-surface/80 dark:text-cru-ink dark:hover:border-cru-gold/60"
+              className="inline-flex h-11 items-center rounded-full border border-neutral-900/[0.1] bg-white/85 px-5 text-sm font-medium text-cru-charcoal backdrop-blur-xs transition-colors hover:border-cru-gold/60 dark:border-white/15 dark:bg-cru-night-surface/85 dark:text-cru-ink dark:hover:border-cru-gold/60"
             >
               Explore Ministries
             </Link>
           </div>
         </div>
-
-        {/* Right column: seaside ink-and-watercolor community drawing + Sun/Moon toggle + shore plants */}
-        <div className="lg:col-span-7">
-          <SeasideHeroScene />
-        </div>
       </div>
+
+      {/* Right full-height edge-bleeding seaside scene (stacks naturally below copy on mobile) */}
+      <SeasideHeroScene />
     </section>
   );
 }

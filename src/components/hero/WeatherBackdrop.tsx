@@ -45,57 +45,45 @@ export function WeatherBackdrop() {
       {/* RAINY LAYER (0s-7s, then softly cycles back every 18s) */}
       <div className="hero-anim hero-rain-layer absolute inset-0">
         {/* Soft watercolor overcast wash across the upper sky */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_0%,rgba(148,163,184,0.16),transparent_72%)] dark:bg-[radial-gradient(ellipse_90%_55%_at_50%_0%,rgba(51,65,85,0.38),transparent_72%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_0%,rgba(148,163,184,0.14),transparent_72%)] dark:bg-[radial-gradient(ellipse_90%_55%_at_50%_0%,rgba(30,41,59,0.42),transparent_72%)]" />
 
-        {/* Hand-sketched overcast ink-and-watercolor cloud bank */}
+        {/* Subtle hand-sketched overcast clouds tucked cleanly in the upper-left sky */}
         <svg
-          viewBox="0 0 1200 220"
+          viewBox="0 0 1200 200"
           preserveAspectRatio="xMidYMin slice"
           fill="none"
-          className="hero-anim hero-cloud absolute inset-x-0 top-0 h-[195px] w-full opacity-70 dark:opacity-45"
+          className="hero-anim hero-cloud absolute inset-x-0 top-12 h-[150px] w-full opacity-50 dark:opacity-35"
           style={
             {
-              "--cloud-duration": "38s",
+              "--cloud-duration": "42s",
               "--cloud-delay": "0s",
             } as CSSProperties
           }
         >
-          {/* Left sketched rain cloud */}
           <g>
             <path
-              d="M118 112 C118 88, 146 72, 176 76 C192 54, 228 50, 250 68 C272 62, 300 76, 302 98 C316 102, 324 114, 318 124 L112 124 C106 118, 110 114, 118 112 Z"
-              className="fill-[#cbd5e1]/40 stroke-[#334155]/35 dark:fill-[#334155]/50 dark:stroke-slate-300/25"
-              strokeWidth="1.25"
+              d="M90 92 C90 74, 110 62, 132 66 C144 50, 172 48, 188 61 C204 56, 226 68, 228 84 C238 87, 244 95, 239 102 L86 102 C82 98, 84 94, 90 92 Z"
+              className="fill-[#cbd5e1]/35 stroke-[#334155]/28 dark:fill-[#334155]/45 dark:stroke-slate-300/20"
+              strokeWidth="1.1"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
-            {/* Delicate sketchbook underside hatching */}
             <path
-              d="M134 118 L292 118 M152 112 L268 112"
-              strokeWidth="0.9"
+              d="M104 97 L220 97"
+              strokeWidth="0.85"
               strokeLinecap="round"
-              strokeDasharray="10 6 18 5"
-              className="stroke-[#475569]/28 dark:stroke-slate-300/20"
+              strokeDasharray="10 6 14 5"
+              className="stroke-[#475569]/22 dark:stroke-slate-300/16"
             />
           </g>
 
-          {/* Right sketched rain cloud */}
-          <g>
-            <path
-              d="M780 98 C780 74, 808 60, 836 64 C852 42, 892 38, 916 58 C940 52, 968 68, 970 92 C984 96, 992 108, 986 118 L774 118 C768 112, 772 102, 780 98 Z"
-              className="fill-[#cbd5e1]/36 stroke-[#334155]/32 dark:fill-[#334155]/45 dark:stroke-slate-300/22"
-              strokeWidth="1.25"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M798 112 L964 112 M824 106 L940 106"
-              strokeWidth="0.9"
-              strokeLinecap="round"
-              strokeDasharray="12 6 16 5"
-              className="stroke-[#475569]/25 dark:stroke-slate-300/18"
-            />
-          </g>
+          <path
+            d="M350 74 C350 62, 364 54, 380 56 C388 45, 408 43, 419 53 C431 50, 446 58, 448 70 C454 72, 458 77, 454 82 L346 82 C343 79, 346 76, 350 74 Z"
+            className="fill-[#cbd5e1]/30 stroke-[#334155]/24 dark:fill-[#334155]/35 dark:stroke-slate-300/18"
+            strokeWidth="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
 
         {/* Delicate graphite/ink diagonal rain streaks */}
@@ -103,7 +91,7 @@ export function WeatherBackdrop() {
           {RAIN_DROPS.map(([left, height, duration, delay, alpha], index) => (
             <span
               key={index}
-              className="hero-anim hero-rain-drop absolute top-0 w-[1.15px] rounded-full bg-[#334155]/75 dark:bg-slate-300/65"
+              className="hero-anim hero-rain-drop absolute top-0 w-[1.15px] rounded-full bg-[#334155]/70 dark:bg-slate-300/60"
               style={
                 {
                   left: `${left}%`,
@@ -120,66 +108,46 @@ export function WeatherBackdrop() {
 
       {/* SUNNY LAYER (rises as rain clears, warming the seaside drawing) */}
       <div className="hero-anim hero-sun-layer absolute inset-0">
-        {/* Soft watercolor sky tint on top-left + warm golden sun wash on upper-right */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_48%_at_14%_12%,rgba(56,189,248,0.11),transparent_68%),radial-gradient(ellipse_56%_50%_at_78%_18%,rgba(253,185,19,0.16),transparent_68%)] dark:bg-[radial-gradient(ellipse_58%_48%_at_14%_12%,rgba(56,189,248,0.05),transparent_68%),radial-gradient(ellipse_54%_50%_at_78%_18%,rgba(253,185,19,0.11),transparent_68%)]" />
+        {/* Soft watercolor sky tint on top-left + subtle warm golden sun wash on upper-right */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_45%_at_14%_12%,rgba(56,189,248,0.09),transparent_68%),radial-gradient(ellipse_52%_48%_at_76%_18%,rgba(253,185,19,0.14),transparent_68%)] dark:bg-[radial-gradient(ellipse_55%_45%_at_14%_12%,rgba(56,189,248,0.04),transparent_68%),radial-gradient(ellipse_52%_48%_at_76%_18%,rgba(253,185,19,0.08),transparent_68%)]" />
 
-        {/* Drifting hand-sketched ink-and-watercolor clouds */}
+        {/* Subtle drifting hand-sketched watercolor clouds on the left open sky */}
         <svg
-          viewBox="0 0 1200 260"
+          viewBox="0 0 1200 220"
           preserveAspectRatio="xMidYMin slice"
           fill="none"
-          className="hero-anim hero-cloud absolute inset-x-0 top-6 h-[220px] w-full"
+          className="hero-anim hero-cloud absolute inset-x-0 top-10 h-[160px] w-full"
           style={
             {
-              "--cloud-duration": "44s",
+              "--cloud-duration": "48s",
               "--cloud-delay": "-6s",
             } as CSSProperties
           }
         >
-          {/* Left airy sketched cloud */}
           <g>
             <path
-              d="M84 128 C84 104, 110 88, 138 92 C152 68, 190 62, 214 82 C236 74, 266 88, 268 112 C282 116, 288 126, 282 136 L78 136 C72 132, 76 128, 84 128 Z"
-              className="fill-[#f8fafc]/80 stroke-[#475569]/24 dark:fill-white/[0.05] dark:stroke-white/15"
-              strokeWidth="1.15"
+              d="M84 104 C84 86, 104 74, 126 78 C138 60, 166 56, 184 71 C202 65, 224 76, 226 94 C236 97, 240 104, 236 111 L80 111 C76 108, 78 105, 84 104 Z"
+              className="fill-[#f8fafc]/75 stroke-[#475569]/20 dark:fill-white/[0.04] dark:stroke-white/12"
+              strokeWidth="1.05"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
             <path
-              d="M104 130 L256 130"
-              strokeWidth="0.85"
+              d="M98 106 L216 106"
+              strokeWidth="0.8"
               strokeLinecap="round"
-              strokeDasharray="14 7 22 6"
-              className="stroke-[#64748b]/20 dark:stroke-white/10"
+              strokeDasharray="12 6 16 5"
+              className="stroke-[#64748b]/18 dark:stroke-white/10"
             />
           </g>
 
-          {/* Center-left distant sketched cloud */}
           <path
-            d="M420 92 C420 76, 438 66, 458 69 C468 54, 492 52, 506 65 C522 61, 540 72, 542 88 C550 90, 554 96, 550 102 L416 102 C412 98, 415 94, 420 92 Z"
-            className="fill-[#f8fafc]/65 stroke-[#475569]/20 dark:fill-white/[0.04] dark:stroke-white/12"
-            strokeWidth="1.05"
+            d="M336 80 C336 68, 350 60, 366 63 C374 51, 394 49, 405 59 C418 56, 432 64, 434 76 C440 78, 443 83, 440 88 L332 88 C329 85, 331 82, 336 80 Z"
+            className="fill-[#f8fafc]/60 stroke-[#475569]/18 dark:fill-white/[0.03] dark:stroke-white/10"
+            strokeWidth="1"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-
-          {/* Right warm-tinted sketched cloud */}
-          <g>
-            <path
-              d="M876 138 C876 116, 902 102, 928 106 C942 84, 978 80, 1002 98 C1022 92, 1048 104, 1050 126 C1062 130, 1066 138, 1060 146 L870 146 C866 142, 869 138, 876 138 Z"
-              className="fill-[#fffbeb]/75 stroke-[#78716c]/22 dark:fill-cru-gold/[0.06] dark:stroke-cru-gold/18"
-              strokeWidth="1.15"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M896 140 L1038 140"
-              strokeWidth="0.85"
-              strokeLinecap="round"
-              strokeDasharray="12 7 18 6"
-              className="stroke-[#78716c]/18 dark:stroke-cru-gold/14"
-            />
-          </g>
         </svg>
       </div>
     </div>

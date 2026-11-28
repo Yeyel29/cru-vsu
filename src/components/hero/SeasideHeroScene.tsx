@@ -19,8 +19,7 @@ interface ShorePlantSpec {
 
 /**
  * Hand-sketched coastal shoots, grass tufts, and wildflowers overlaid directly
- * onto the sandy shore of the seaside drawing—positioned clear of the bench
- * and students' feet.
+ * onto the sandy shore of the seaside drawing, clear of the bench and students.
  */
 const SHORE_PLANTS: readonly ShorePlantSpec[] = [
   { leftPercent: 17, bottomPercent: 8, kind: "coastal-grass", heightPx: 30, growDelay: 6.9, growDuration: 3.4, swayDuration: 5.8, swayDelay: 0.2 },
@@ -75,7 +74,7 @@ function ShorePlantSvg({
           d="M17 44 C15 31, 10 20, 4 11"
           strokeWidth="1.4"
           strokeLinecap="round"
-          className="stroke-[#2c3325] dark:stroke-[#a3b899]"
+          className="stroke-[#2c3325] dark:stroke-[#9ab090]"
         />
         <path
           d="M17 44 C17 29, 18 16, 17 4"
@@ -89,14 +88,13 @@ function ShorePlantSvg({
           strokeLinecap="round"
           className="stroke-[#2c3325] dark:stroke-[#9ab090]"
         />
-        {/* Soft watercolor sage tint behind blades */}
         <path
           d="M16 44 C14 33, 10 24, 7 16 C12 22, 16 32, 18 44 Z"
-          className="fill-[#8ba86e]/45 dark:fill-[#6f8f54]/35"
+          className="fill-[#8ba86e]/45 dark:fill-[#4d6b3b]/40"
         />
         <path
           d="M18 44 C20 33, 24 25, 28 18 C23 24, 20 33, 19 44 Z"
-          className="fill-[#7c9c5e]/45 dark:fill-[#5e7d45]/35"
+          className="fill-[#7c9c5e]/45 dark:fill-[#3d572e]/40"
         />
       </svg>
     );
@@ -120,12 +118,12 @@ function ShorePlantSvg({
         <path
           d="M17.5 27 C10 25, 6 20, 7 14 C13 15, 17 19, 17.5 27 Z"
           strokeWidth="1.2"
-          className="fill-[#95b278]/70 stroke-[#2c3325] dark:fill-[#65844a]/65 dark:stroke-[#b7ccb0]"
+          className="fill-[#95b278]/70 stroke-[#2c3325] dark:fill-[#4d6b3b]/65 dark:stroke-[#b7ccb0]"
         />
         <path
           d="M18.5 20 C25 18, 30 13, 29 7 C23 8, 19 13, 18.5 20 Z"
           strokeWidth="1.2"
-          className="fill-[#a9c48c]/70 stroke-[#2c3325] dark:fill-[#769958]/65 dark:stroke-[#b7ccb0]"
+          className="fill-[#a9c48c]/70 stroke-[#2c3325] dark:fill-[#5e7d45]/65 dark:stroke-[#b7ccb0]"
         />
       </svg>
     );
@@ -148,7 +146,7 @@ function ShorePlantSvg({
       <path
         d="M17.5 36 C11 34, 8 30, 9 25 C14 26, 17 30, 17.5 36 Z"
         strokeWidth="1.1"
-        className="fill-[#8ba86e]/65 stroke-[#2c3325] dark:fill-[#5e7d45]/60 dark:stroke-[#b7ccb0]"
+        className="fill-[#8ba86e]/65 stroke-[#2c3325] dark:fill-[#4d6b3b]/60 dark:stroke-[#b7ccb0]"
       />
       <g
         className="hero-anim hero-bloom-pop"
@@ -189,154 +187,178 @@ function ShorePlantSvg({
 }
 
 /**
- * Right-side ink-and-watercolor seaside fellowship scene with:
- * - Seamless light/dark canvas blending
- * - Interactive sketched Sun <-> Moon button for light/dark theme switching
- * - Staggered ink-and-watercolor coastal plants growing along the sandy shore
+ * Full-height right-bleeding seaside fellowship scene.
+ * - Cross-fades between dedicated daylight and moonlit night-sketchbook paintings.
+ * - Uses a left-edge mask on desktop so the artwork feathers cleanly into the left hero column.
+ * - Locks the inner stage to exact 4:3 geometry so the Sun/Moon toggle and shore plants
+ *   stay pixel-accurate across all viewport sizes.
  */
 export function SeasideHeroScene() {
   const { theme, toggleTheme } = useTheme();
   const isLight = theme === "light";
 
   return (
-    <div className="relative mx-auto w-full max-w-[680px] aspect-[4/3] select-none">
-      {/* Custom ink-and-watercolor seaside community drawing */}
-      <Image
-        src="/images/hero-seaside.jpg"
-        alt="Hand-drawn ink and watercolor illustration of four Cru VSU students by the seaside—two sitting on a bench and two standing nearby with an acoustic guitar and a Bible, facing out toward the ocean"
-        fill
-        priority
-        sizes="(max-width: 1024px) 100vw, 58vw"
-        className="pointer-events-none object-contain mix-blend-multiply transition-[filter] duration-500 dark:mix-blend-screen dark:invert dark:hue-rotate-180 dark:brightness-[0.86] dark:saturate-[0.82]"
-      />
+    <div className="relative z-[5] mt-4 w-full overflow-hidden select-none lg:absolute lg:inset-y-0 lg:right-0 lg:mt-0 lg:w-[66%] lg:[mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_100%)] lg:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_100%)]">
+      {/* Strictly 4:3 inner stage anchored right-bottom so overlays never drift */}
+      <div className="relative aspect-[4/3] w-full lg:absolute lg:bottom-0 lg:right-0 lg:h-[max(100%,calc(66vw*0.75))] lg:w-auto">
+        {/* Daylight ink-and-watercolor seaside painting */}
+        <Image
+          src="/images/hero-seaside.jpg"
+          alt="Hand-drawn ink and watercolor illustration of four Cru VSU students by the seaside, two sitting on a bench and two standing nearby with an acoustic guitar and a Bible, facing out toward the ocean"
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 66vw"
+          className="pointer-events-none object-cover mix-blend-multiply opacity-100 transition-opacity duration-500 dark:opacity-0"
+        />
 
-      {/* Interactive sketched Sun (light) <-> Crescent Moon (dark) theme switch */}
-      <button
-        type="button"
-        role="switch"
-        aria-checked={isLight}
-        aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
-        title={isLight ? "Click the sun for night mode" : "Click the moon for daylight mode"}
-        onClick={toggleTheme}
-        className="group absolute left-[64.5%] top-[17.5%] z-20 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full transition-transform duration-300 ease-out hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cru-charcoal dark:focus-visible:outline-cru-gold sm:size-20 md:size-24"
-      >
-        <svg
-          viewBox="0 0 100 100"
-          fill="none"
+        {/* Dedicated moonlit night-sketchbook seaside painting */}
+        <Image
+          src="/images/hero-seaside-dark.jpg"
+          alt=""
           aria-hidden="true"
-          className="size-full overflow-visible"
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 66vw"
+          className="pointer-events-none object-cover opacity-0 transition-opacity duration-500 dark:opacity-100"
+        />
+
+        {/* Interactive sketched Sun (light) <-> glowing Crescent Moon (dark) theme switch */}
+        <button
+          type="button"
+          role="switch"
+          aria-checked={isLight}
+          aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
+          title={
+            isLight
+              ? "Click the sun for night mode"
+              : "Click the moon for daylight mode"
+          }
+          onClick={toggleTheme}
+          className="group absolute left-[64.5%] top-[17.5%] z-20 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full transition-transform duration-300 ease-out hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cru-charcoal dark:focus-visible:outline-cru-gold sm:size-20 lg:size-28"
         >
-          {/* Daylight Sun (hidden in dark mode via CSS so zero hydration flash) */}
-          <g className="dark:hidden">
-            {/* Soft watercolor golden halo */}
-            <circle
-              cx="50"
-              cy="50"
-              r="34"
-              className="fill-[#fde68a]/50 transition-opacity duration-300 group-hover:fill-[#fde68a]/75"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="24"
-              className="fill-[#fcd34d]/45"
-            />
-            {/* Hand-sketched radiating rays */}
-            <g className="origin-center transition-transform duration-500 ease-out group-hover:rotate-12">
-              {SUN_RAYS.map(([x1, y1, x2, y2], idx) => (
-                <line
-                  key={idx}
-                  x1={x1}
-                  y1={y1}
-                  x2={x2}
-                  y2={y2}
-                  strokeWidth={idx < 4 ? "1.6" : idx < 8 ? "1.35" : "1.05"}
-                  strokeLinecap="round"
-                  className="stroke-[#27272a]/80"
-                />
-              ))}
-            </g>
-            {/* Sketched sun disc */}
-            <circle
-              cx="50"
-              cy="50"
-              r="14.5"
-              strokeWidth="1.8"
-              className="fill-[#fef08a] stroke-[#27272a]"
-            />
-          </g>
-
-          {/* Night Crescent Moon (shown in dark mode) */}
-          <g className="hidden dark:block">
-            {/* Soft moonlit Cru-gold halo */}
-            <circle
-              cx="50"
-              cy="50"
-              r="30"
-              className="fill-cru-gold/15 transition-opacity duration-300 group-hover:fill-cru-gold/25"
-            />
-            {/* Sketched crescent moon */}
-            <path
-              d="M57 32 C45 32, 36 41, 36 53 C36 65, 45 74, 57 74 C61 74, 65 72.8, 68 70.6 C58.5 70.2, 51 62.4, 51 53 C51 43.6, 58.5 35.8, 68 35.4 C65 33.2, 61 32, 57 32 Z"
-              strokeWidth="1.7"
-              strokeLinejoin="round"
-              className="fill-[#fde68a]/85 stroke-[#fef3c7]"
-            />
-            {/* Delicate hand-drawn stars */}
-            <path
-              d="M72 28 L73.2 31.8 L77 33 L73.2 34.2 L72 38 L70.8 34.2 L67 33 L70.8 31.8 Z"
-              className="fill-[#fef3c7]/85"
-            />
-            <circle cx="30" cy="34" r="1.4" className="fill-[#fef3c7]/70" />
-            <circle cx="76" cy="54" r="1.2" className="fill-[#fde68a]/75" />
-          </g>
-        </svg>
-      </button>
-
-      {/* Growing ink-and-watercolor coastal plants directly along the sandy shore */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-10 overflow-hidden"
-      >
-        {SHORE_PLANTS.map((plant, index) => (
-          <div
-            key={index}
-            style={{
-              left: `${plant.leftPercent}%`,
-              bottom: `${plant.bottomPercent}%`,
-            }}
-            className="absolute -translate-x-1/2"
+          <svg
+            viewBox="0 0 100 100"
+            fill="none"
+            aria-hidden="true"
+            className="size-full overflow-visible"
           >
+            {/* Daylight Sun */}
+            <g className="dark:hidden">
+              <circle
+                cx="50"
+                cy="50"
+                r="34"
+                className="fill-[#fde68a]/50 transition-opacity duration-300 group-hover:fill-[#fde68a]/75"
+              />
+              <circle cx="50" cy="50" r="24" className="fill-[#fcd34d]/45" />
+              <g className="origin-center transition-transform duration-500 ease-out group-hover:rotate-12">
+                {SUN_RAYS.map(([x1, y1, x2, y2], idx) => (
+                  <line
+                    key={idx}
+                    x1={x1}
+                    y1={y1}
+                    x2={x2}
+                    y2={y2}
+                    strokeWidth={idx < 4 ? "1.6" : idx < 8 ? "1.35" : "1.05"}
+                    strokeLinecap="round"
+                    className="stroke-[#27272a]/80"
+                  />
+                ))}
+              </g>
+              <circle
+                cx="50"
+                cy="50"
+                r="14.5"
+                strokeWidth="1.8"
+                className="fill-[#fef08a] stroke-[#27272a]"
+              />
+            </g>
+
+            {/* Night Crescent Moon matching the moonlit sketchbook glow */}
+            <g className="hidden dark:block">
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                className="fill-[#fef3c7]/10 transition-opacity duration-300 group-hover:fill-[#fef3c7]/16"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="27"
+                className="fill-[#fde68a]/16 transition-opacity duration-300 group-hover:fill-[#fde68a]/24"
+              />
+              <path
+                d="M55 31 C43 31, 34 40, 34 52 C34 64, 43 73, 55 73 C59.5 73, 63.5 71.7, 66.8 69.3 C57 69, 49.5 61.3, 49.5 52 C49.5 42.7, 57 35, 66.8 34.7 C63.5 32.3, 59.5 31, 55 31 Z"
+                strokeWidth="1.6"
+                strokeLinejoin="round"
+                className="fill-[#fef9c3] stroke-[#fffbeb]"
+              />
+              {/* Delicate sketched night stars */}
+              <path
+                d="M71 27 L72.2 31 L76 32.2 L72.2 33.4 L71 37.4 L69.8 33.4 L66 32.2 L69.8 31 Z"
+                className="fill-[#fef9c3]/90"
+              />
+              <path
+                d="M65 44 L65.8 46.5 L68.3 47.3 L65.8 48.1 L65 50.6 L64.2 48.1 L61.7 47.3 L64.2 46.5 Z"
+                className="fill-[#fef9c3]/80"
+              />
+              <circle cx="29" cy="36" r="1.4" className="fill-[#fef9c3]/75" />
+            </g>
+          </svg>
+        </button>
+
+        {/* Growing ink-and-watercolor coastal plants along the sandy shore */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-10 overflow-hidden"
+        >
+          {SHORE_PLANTS.map((plant, index) => (
             <div
-              className="hero-anim hero-plant-grow"
-              style={
-                {
-                  "--grow-delay": `${plant.growDelay}s`,
-                  "--grow-duration": `${plant.growDuration}s`,
-                } as CSSProperties
-              }
+              key={index}
+              style={{
+                left: `${plant.leftPercent}%`,
+                bottom: `${plant.bottomPercent}%`,
+              }}
+              className="absolute -translate-x-1/2"
             >
               <div
-                className="hero-anim hero-plant-sway"
+                className="hero-anim hero-plant-grow"
                 style={
                   {
-                    "--sway-duration": `${plant.swayDuration}s`,
-                    "--sway-delay": `${plant.swayDelay}s`,
+                    "--grow-delay": `${plant.growDelay}s`,
+                    "--grow-duration": `${plant.growDuration}s`,
                   } as CSSProperties
                 }
               >
-                <ShorePlantSvg
-                  kind={plant.kind}
-                  heightPx={plant.heightPx}
-                  bloomDelay={Number(
-                    (plant.growDelay + plant.growDuration * 0.62).toFixed(2)
-                  )}
-                />
+                <div
+                  className="hero-anim hero-plant-sway"
+                  style={
+                    {
+                      "--sway-duration": `${plant.swayDuration}s`,
+                      "--sway-delay": `${plant.swayDelay}s`,
+                    } as CSSProperties
+                  }
+                >
+                  <ShorePlantSvg
+                    kind={plant.kind}
+                    heightPx={plant.heightPx}
+                    bloomDelay={Number(
+                      (plant.growDelay + plant.growDuration * 0.62).toFixed(2)
+                    )}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+
+      {/* Soft bottom feather so dark-mode shore blends into the section divider */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-10 bg-gradient-to-t from-white/90 via-white/30 to-transparent dark:from-cru-night dark:via-cru-night/45"
+      />
     </div>
   );
 }
